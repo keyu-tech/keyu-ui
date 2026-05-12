@@ -1,0 +1,172 @@
+/* ============================================================
+   KEYU — Design Tokens
+   Single source of truth for colors, type, spacing, radii, motion.
+   Direction: Circuit — industrial, tech-forward, sharp.
+   ============================================================ */
+
+/* ---------- 1. PRIMITIVES ---------- */
+:root {
+  /* Neutrals — true black through paper */
+  --ink-1000: #050505;
+  --ink-950:  #0A0A0A;
+  --ink-900:  #111111;
+  --ink-800:  #181818;
+  --ink-700:  #232323;
+  --ink-600:  #3A3A3A;
+  --ink-500:  #5A5A5A;
+  --ink-400:  #7A7A7A;
+  --ink-300:  #A0A0A0;
+  --ink-200:  #C8C8C8;
+  --ink-150:  #DCDAD2;
+  --ink-100:  #E8E6DD;
+  --ink-50:   #F2F0E8;
+  --ink-25:   #FAF8F2;
+  --paper:    #FFFCF4;
+
+  /* Gold scale */
+  --gold-50:   #FAF3DC;
+  --gold-100:  #F2E3A8;
+  --gold-200:  #E8CE74;
+  --gold-300:  #DDB94A;
+  --gold-400:  #C9A14A;
+  --gold-500:  #B8902F;
+  --gold-600:  #8C6B1F;
+  --gold-700:  #5E4612;
+  --gold-bright:  #E8B833;  /* Circuit primary */
+
+  /* Status */
+  --ok:    #6B8E4E;
+  --warn:  #C98A2A;
+  --error: #B9442B;
+  --info:  #4A6E8A;
+
+  /* Spacing (4px grid) */
+  --sp-0:   0;
+  --sp-1:   4px;
+  --sp-2:   8px;
+  --sp-3:   12px;
+  --sp-4:   16px;
+  --sp-5:   20px;
+  --sp-6:   24px;
+  --sp-8:   32px;
+  --sp-10:  40px;
+  --sp-12:  48px;
+  --sp-16:  64px;
+  --sp-20:  80px;
+  --sp-24:  96px;
+  --sp-32:  128px;
+  --sp-40:  160px;
+
+  /* Radii */
+  --r-0:    0;
+  --r-1:    2px;
+  --r-2:    4px;
+  --r-3:    6px;
+  --r-4:    8px;
+  --r-5:    12px;
+  --r-6:    16px;
+  --r-pill: 999px;
+
+  /* Borders */
+  --bw-hair:   0.5px;
+  --bw-1:      1px;
+  --bw-2:      2px;
+  --bw-3:      3px;
+
+  /* Shadows */
+  --shadow-1: 0 1px 0 rgba(255,255,255,0.04) inset, 0 1px 2px rgba(0,0,0,0.4);
+  --shadow-2: 0 1px 0 rgba(255,255,255,0.04) inset, 0 4px 12px rgba(0,0,0,0.35);
+  --shadow-3: 0 1px 0 rgba(255,255,255,0.04) inset, 0 12px 32px rgba(0,0,0,0.5);
+  --shadow-gold: 0 0 0 1px rgba(232,184,51,0.4), 0 8px 24px -8px rgba(232,184,51,0.35);
+
+  /* Motion */
+  --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:    cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-1: 120ms;
+  --dur-2: 200ms;
+  --dur-3: 320ms;
+  --dur-4: 520ms;
+
+  /* Typography */
+  --font-display: "Noto Kufi Arabic", "Geist", "Inter", system-ui, sans-serif;
+  --font-body:    "Geist", "Inter", "Noto Kufi Arabic", system-ui, sans-serif;
+  --font-mono:    "Geist Mono", "JetBrains Mono", ui-monospace, monospace;
+  --font-arabic:  "Noto Kufi Arabic", "Noto Sans Arabic", system-ui, sans-serif;
+
+  /* Type scale */
+  --t-xs:   12px;
+  --t-sm:   14px;
+  --t-base: 16px;
+  --t-md:   18px;
+  --t-lg:   20px;
+  --t-xl:   24px;
+  --t-2xl:  30px;
+  --t-3xl:  38px;
+  --t-4xl:  48px;
+  --t-5xl:  64px;
+  --t-6xl:  84px;
+  --t-7xl:  112px;
+
+  --lh-tight:   1.05;
+  --lh-snug:    1.2;
+  --lh-normal:  1.45;
+  --lh-loose:   1.65;
+
+  --ls-tight:   -0.02em;
+  --ls-snug:    -0.01em;
+  --ls-normal:  0;
+  --ls-wide:    0.06em;
+  --ls-wider:   0.14em;
+
+  /* ---------- 2. SEMANTIC TOKENS — Circuit ---------- */
+  --bg-canvas:     #0B0C0E;
+  --bg-elevated:   #131418;
+  --bg-sunken:     #060708;
+  --bg-card:       #101216;
+  --bg-paper:      #F5F5F0;
+
+  --fg-primary:    #E8E6DD;
+  --fg-secondary:  #9CA0A8;
+  --fg-muted:      #5A5E66;
+  --fg-on-gold:    #0B0C0E;
+  --fg-on-ink:     #E8E6DD;
+  --fg-on-paper:   #0B0C0E;
+
+  --accent:        var(--gold-bright);
+  --accent-hover:  #F5C84A;
+  --accent-press:  #C99A20;
+  --accent-soft:   rgba(232, 184, 51, 0.10);
+
+  --line:          rgba(232,230,221,0.07);
+  --line-strong:   rgba(232,230,221,0.16);
+  --line-gold:     rgba(232,184,51,0.35);
+
+  --radius-card:   var(--r-2);     /* 4px — sharp */
+  --radius-button: var(--r-1);
+  --radius-chip:   var(--r-1);
+
+  --density:       0.85;
+  --display-weight: 800;
+  --display-tracking: var(--ls-snug);
+}
+
+/* ---------- 3. BASE ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg-canvas);
+  color: var(--fg-primary);
+  font-family: var(--font-body);
+  font-size: var(--t-base);
+  line-height: var(--lh-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+[lang="ar"], [lang="ku"], [dir="rtl"] {
+  font-family: var(--font-arabic);
+}
+::selection { background: var(--accent); color: var(--fg-on-gold); }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; }

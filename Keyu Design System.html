@@ -1,0 +1,2628 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Keyu — Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;500;600;700;800;900&family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&display=swap" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="shadcn.css" />
+<style>
+  /* ============================================================
+     KEYU — Design System reference document
+     Layout: sticky topbar, left TOC, long-scroll content.
+     ============================================================ */
+
+  body { overflow-x: hidden; }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; gap: var(--sp-5);
+    padding: var(--sp-3) var(--sp-6);
+    background: color-mix(in srgb, var(--bg-canvas) 86%, transparent);
+    backdrop-filter: saturate(140%) blur(14px);
+    -webkit-backdrop-filter: saturate(140%) blur(14px);
+    border-bottom: var(--bw-hair) solid var(--line);
+  }
+  .brand { display: flex; align-items: center; gap: var(--sp-3); }
+  .brand svg { color: var(--accent); }
+  .brand .name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--t-md);
+    letter-spacing: var(--ls-tight);
+  }
+  .brand .name .dot { color: var(--accent); }
+  .brand .tag {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: var(--ls-wider);
+    color: var(--fg-muted);
+    padding: 2px 6px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-1);
+    text-transform: uppercase;
+  }
+  .topbar nav { display: flex; gap: var(--sp-4); margin-left: var(--sp-6); }
+  .topbar nav a {
+    font-size: var(--t-sm);
+    color: var(--fg-secondary);
+    transition: color var(--dur-2) var(--ease-out);
+  }
+  .topbar nav a:hover { color: var(--fg-primary); }
+  .topbar .spacer { flex: 1; }
+
+  /* Direction switcher */
+  .switcher {
+    display: inline-flex;
+    padding: 3px;
+    background: var(--bg-sunken);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-button);
+    gap: 2px;
+  }
+  .switcher button {
+    background: transparent;
+    border: 0;
+    color: var(--fg-secondary);
+    padding: 6px 12px;
+    border-radius: calc(var(--radius-button) - 2px);
+    font-size: var(--t-xs);
+    font-family: var(--font-mono);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    transition: all var(--dur-2) var(--ease-out);
+  }
+  .switcher button[aria-selected="true"] {
+    background: var(--accent);
+    color: var(--fg-on-gold);
+    font-weight: 600;
+  }
+  .switcher button:not([aria-selected="true"]):hover { color: var(--fg-primary); }
+
+  /* ---------- Page layout ---------- */
+  .page {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .toc {
+    position: sticky; top: 56px;
+    align-self: start;
+    height: calc(100vh - 56px);
+    padding: var(--sp-10) var(--sp-6) var(--sp-10) var(--sp-8);
+    overflow-y: auto;
+    border-right: var(--bw-hair) solid var(--line);
+  }
+  .toc-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: var(--sp-3);
+  }
+  .toc ol { list-style: none; padding: 0; margin: 0 0 var(--sp-8); }
+  .toc ol li {
+    display: flex; align-items: baseline; gap: var(--sp-3);
+    padding: 6px 0;
+  }
+  .toc ol li .num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--fg-muted);
+    min-width: 18px;
+  }
+  .toc ol li a {
+    font-size: var(--t-sm);
+    color: var(--fg-secondary);
+    transition: color var(--dur-2) var(--ease-out);
+  }
+  .toc ol li a:hover, .toc ol li a.active { color: var(--fg-primary); }
+  .toc ol li.active::before {
+    content: "";
+    width: 8px; height: 1px;
+    background: var(--accent);
+    margin-right: -4px;
+  }
+
+  .main { padding: var(--sp-10) var(--sp-12) var(--sp-32) var(--sp-12); min-width: 0; }
+
+  section {
+    padding: var(--sp-16) 0;
+    border-top: var(--bw-hair) solid var(--line);
+  }
+  section:first-of-type { border-top: 0; padding-top: var(--sp-8); }
+
+  .sec-head { margin-bottom: var(--sp-12); }
+  .sec-eyebrow {
+    display: flex; align-items: center; gap: var(--sp-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: var(--sp-4);
+  }
+  .sec-eyebrow::before {
+    content: "";
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+  .sec-title {
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-size: clamp(38px, 5vw, 64px);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--display-tracking);
+    margin: 0 0 var(--sp-4);
+    color: var(--fg-primary);
+  }
+  .sec-lede {
+    font-size: var(--t-lg);
+    line-height: var(--lh-loose);
+    color: var(--fg-secondary);
+    max-width: 60ch;
+    margin: 0;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: var(--sp-24) 0 var(--sp-16); border-top: 0; }
+  .hero .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: var(--sp-6);
+    display: flex; gap: var(--sp-3); align-items: center;
+  }
+  .hero .eyebrow .dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--accent);
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-size: clamp(56px, 9vw, 132px);
+    line-height: 0.95;
+    letter-spacing: var(--ls-tight);
+    margin: 0 0 var(--sp-8);
+    color: var(--fg-primary);
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+    font-weight: inherit;
+  }
+  .hero .sub {
+    font-size: var(--t-xl);
+    line-height: 1.4;
+    color: var(--fg-secondary);
+    max-width: 60ch;
+    margin: 0 0 var(--sp-10);
+  }
+  .hero-meta {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--sp-6);
+    padding-top: var(--sp-8);
+    border-top: var(--bw-hair) solid var(--line);
+  }
+  .hero-meta .item .k {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 4px;
+  }
+  .hero-meta .item .v {
+    font-size: var(--t-sm);
+    color: var(--fg-primary);
+  }
+
+  /* ---------- Generic grid ---------- */
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-6); }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-6); }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-5); }
+  .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--sp-4); }
+  .grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--sp-4); }
+
+  /* Card primitive used to frame examples */
+  .frame {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+  .frame-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: var(--sp-3) var(--sp-4);
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+  .frame-body { padding: var(--sp-8); }
+  .frame-body.tight { padding: var(--sp-5); }
+  .frame-body.huge  { padding: var(--sp-16) var(--sp-8); }
+
+  /* ---------- 01 / Brand ---------- */
+  .pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid var(--line); border-radius: var(--radius-card); overflow: hidden; }
+  .pillar { padding: var(--sp-8); border-right: 1px solid var(--line); background: var(--bg-card); }
+  .pillar:last-child { border-right: 0; }
+  .pillar .n {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: var(--ls-wider);
+    color: var(--accent);
+    margin-bottom: var(--sp-4);
+  }
+  .pillar h3 {
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-size: var(--t-2xl);
+    letter-spacing: var(--ls-snug);
+    margin: 0 0 var(--sp-3);
+  }
+  .pillar p { font-size: var(--t-sm); line-height: var(--lh-loose); color: var(--fg-secondary); margin: 0; }
+
+  .voice { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-4); }
+  .voice .col {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    padding: var(--sp-8);
+    background: var(--bg-card);
+  }
+  .voice h4 {
+    display: flex; align-items: center; gap: var(--sp-3);
+    font-family: var(--font-mono);
+    font-size: var(--t-xs);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    margin: 0 0 var(--sp-5);
+  }
+  .voice .yes h4 { color: var(--accent); }
+  .voice .no  h4 { color: var(--fg-muted); }
+  .voice .yes h4::before { content: "+"; font-family: var(--font-mono); font-size: 14px; }
+  .voice .no  h4::before { content: "—"; font-family: var(--font-mono); font-size: 14px; }
+  .voice ul { margin: 0; padding: 0; list-style: none; }
+  .voice ul li {
+    padding: var(--sp-3) 0;
+    border-top: 1px solid var(--line);
+    font-size: var(--t-sm);
+    line-height: var(--lh-loose);
+    color: var(--fg-primary);
+  }
+  .voice .no ul li { color: var(--fg-muted); text-decoration: line-through; text-decoration-color: var(--fg-muted); text-decoration-thickness: 1px; }
+  .voice ul li:first-child { border-top: 0; padding-top: 0; }
+
+  /* ---------- 02 / Logo ---------- */
+  .logo-hero {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: var(--sp-6);
+  }
+  .logo-display {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    padding: var(--sp-12);
+    display: flex; align-items: center; justify-content: center;
+    min-height: 360px;
+  }
+  .logo-display svg { color: var(--accent); height: 240px; width: auto; }
+  .logo-display .lockup {
+    display: flex; align-items: center; gap: var(--sp-6);
+  }
+  .logo-display .lockup .word {
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-size: 96px;
+    letter-spacing: var(--ls-tight);
+    color: var(--fg-primary);
+    line-height: 1;
+  }
+  .logo-display .lockup .word .dot { color: var(--accent); }
+  .logo-display .lockup .word small {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--fg-muted);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    margin-top: var(--sp-2);
+    font-weight: 400;
+  }
+  .logo-rules {
+    display: grid;
+    gap: var(--sp-3);
+  }
+  .logo-rule {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    padding: var(--sp-5);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--sp-4);
+    align-items: start;
+  }
+  .logo-rule .icon {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: var(--radius-button);
+  }
+  .logo-rule h5 { margin: 0 0 4px; font-size: var(--t-sm); font-weight: 600; }
+  .logo-rule p { margin: 0; font-size: var(--t-xs); color: var(--fg-secondary); line-height: var(--lh-normal); }
+
+  .logo-variants {
+    margin-top: var(--sp-6);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--sp-4);
+  }
+  .logo-variants .v {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+  .logo-variants .v .swatch {
+    height: 160px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-variants .v[data-bg="black"] .swatch { background: var(--ink-950); }
+  .logo-variants .v[data-bg="gold"]  .swatch { background: var(--accent); }
+  .logo-variants .v[data-bg="paper"] .swatch { background: var(--bg-paper); }
+  .logo-variants .v[data-bg="elev"]  .swatch { background: var(--bg-elevated); border-bottom: 1px solid var(--line); }
+  .logo-variants .v svg { height: 72px; }
+  .logo-variants .v .label {
+    padding: var(--sp-3) var(--sp-4);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between;
+  }
+  .logo-variants .v .label .name { color: var(--fg-primary); }
+
+  /* Clearspace diagram */
+  .clearspace {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    padding: var(--sp-12);
+    display: flex; justify-content: center;
+    position: relative;
+  }
+  .clearspace-rig {
+    position: relative;
+    display: inline-block;
+    padding: 64px;
+  }
+  .clearspace-rig::before {
+    content: "";
+    position: absolute; inset: 0;
+    border: 1px dashed var(--line-gold);
+    pointer-events: none;
+  }
+  .clearspace-rig::after {
+    content: "x";
+    position: absolute;
+    bottom: -22px; left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: var(--ls-wide);
+  }
+  .clearspace-rig svg { height: 120px; color: var(--accent); display: block; }
+  .clearspace-rig .mark-wrap { position: relative; padding: 32px; border: 1px solid var(--line-strong); }
+  .clearspace-rig .mark-wrap::before,
+  .clearspace-rig .mark-wrap::after {
+    content: "x"; position: absolute;
+    font-family: var(--font-mono); font-size: 10px; color: var(--fg-muted);
+  }
+  .clearspace-rig .mark-wrap::before { top: 6px; left: 6px; }
+  .clearspace-rig .mark-wrap::after  { bottom: 6px; right: 6px; }
+
+  /* Misuse grid */
+  .misuse { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-4); }
+  .misuse .m {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    background: var(--bg-card);
+  }
+  .misuse .m .demo {
+    aspect-ratio: 1.4;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    background: var(--ink-950);
+  }
+  .misuse .m .demo svg { color: var(--accent); height: 64px; }
+  .misuse .m[data-do="stretch"] .demo svg { transform: scaleX(1.6); }
+  .misuse .m[data-do="rotate"]  .demo svg { transform: rotate(-18deg); }
+  .misuse .m[data-do="color"]   .demo svg { color: #B9442B; }
+  .misuse .m[data-do="bg"]      .demo { background: linear-gradient(135deg, #4A6E8A 0%, #B9442B 100%); }
+  .misuse .m .demo::after {
+    content: ""; position: absolute; inset: 0;
+    background:
+      linear-gradient(to top right,
+        transparent calc(50% - 1px),
+        rgba(185,68,43,0.6) calc(50% - 1px),
+        rgba(185,68,43,0.6) calc(50% + 1px),
+        transparent calc(50% + 1px));
+  }
+  .misuse .m .label { padding: var(--sp-3) var(--sp-4); font-family: var(--font-mono); font-size: 10.5px; letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--fg-muted); border-top: 1px solid var(--line); }
+  .misuse .m .label strong { color: #B9442B; font-weight: 600; }
+
+  /* ---------- 03 / Color ---------- */
+  .direction-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); }
+  .dir-card {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    background: var(--bg-card);
+  }
+  .dir-card .head {
+    padding: var(--sp-5);
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+  }
+  .dir-card .head .name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--t-lg);
+  }
+  .dir-card .head .tag {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: var(--ls-wider);
+    color: var(--fg-muted);
+    text-transform: uppercase;
+  }
+  .dir-card .swatch {
+    height: 140px;
+    display: flex; align-items: flex-end;
+    padding: var(--sp-5);
+  }
+  .dir-card .swatch .meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: var(--ls-wide);
+  }
+  .chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+  .chip {
+    height: 56px;
+    display: flex; align-items: flex-end;
+    padding: 8px 10px;
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: var(--ls-wide);
+  }
+  .chip.dark { color: rgba(255,255,255,0.6); }
+  .chip.light { color: rgba(0,0,0,0.6); }
+
+  .palette-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: var(--sp-4);
+    padding: var(--sp-4) 0;
+    border-top: 1px solid var(--line);
+    align-items: center;
+  }
+  .palette-row:first-child { border-top: 0; }
+  .palette-row .label { font-family: var(--font-mono); font-size: var(--t-xs); letter-spacing: var(--ls-wide); color: var(--fg-muted); text-transform: uppercase; }
+  .palette-row .ramp { display: flex; gap: 1px; height: 40px; border-radius: var(--r-2); overflow: hidden; }
+  .palette-row .ramp .step { flex: 1; position: relative; }
+  .palette-row .ramp .step::after {
+    content: attr(data-step);
+    position: absolute;
+    bottom: 3px; left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: rgba(0,0,0,0.5);
+  }
+  .palette-row .ramp .step.dark::after { color: rgba(255,255,255,0.5); }
+
+  .semantic-tokens {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+  .semantic-tokens .row {
+    display: grid;
+    grid-template-columns: 28px 220px 1fr 120px;
+    gap: var(--sp-4);
+    padding: var(--sp-4) var(--sp-5);
+    border-top: 1px solid var(--line);
+    align-items: center;
+    background: var(--bg-card);
+  }
+  .semantic-tokens .row:first-child { border-top: 0; }
+  .semantic-tokens .row .swatch { width: 22px; height: 22px; border-radius: var(--r-2); border: 1px solid var(--line); }
+  .semantic-tokens .row .name { font-family: var(--font-mono); font-size: var(--t-xs); color: var(--fg-primary); }
+  .semantic-tokens .row .desc { font-size: var(--t-xs); color: var(--fg-secondary); }
+  .semantic-tokens .row .val  { font-family: var(--font-mono); font-size: 11px; color: var(--fg-muted); text-align: right; }
+
+  /* ---------- 04 / Type ---------- */
+  .type-hero {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    padding: var(--sp-12);
+    text-align: center;
+    overflow: hidden;
+  }
+  .type-hero .glyph {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(120px, 18vw, 240px);
+    line-height: 0.9;
+    letter-spacing: var(--ls-tight);
+    color: var(--accent);
+  }
+  .type-hero .glyph small {
+    display: block;
+    font-size: var(--t-sm);
+    font-family: var(--font-mono);
+    letter-spacing: var(--ls-wider);
+    color: var(--fg-muted);
+    text-transform: uppercase;
+    margin-top: var(--sp-3);
+    font-weight: 400;
+  }
+
+  .type-scale { display: grid; gap: 0; border: 1px solid var(--line); border-radius: var(--radius-card); overflow: hidden; background: var(--bg-card); }
+  .type-row {
+    display: grid;
+    grid-template-columns: 88px 100px 1fr;
+    align-items: baseline;
+    gap: var(--sp-6);
+    padding: var(--sp-5) var(--sp-6);
+    border-top: 1px solid var(--line);
+  }
+  .type-row:first-child { border-top: 0; }
+  .type-row .name { font-family: var(--font-mono); font-size: var(--t-xs); letter-spacing: var(--ls-wide); color: var(--accent); text-transform: uppercase; }
+  .type-row .meta { font-family: var(--font-mono); font-size: 11px; color: var(--fg-muted); }
+  .type-row .specimen { font-family: var(--font-display); color: var(--fg-primary); }
+
+  .scripts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-4); }
+  .script-card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    padding: var(--sp-8);
+  }
+  .script-card .label {
+    font-family: var(--font-mono);
+    font-size: var(--t-xs);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: var(--sp-5);
+    display: flex; justify-content: space-between;
+  }
+  .script-card .label .dir { color: var(--fg-muted); }
+  .script-card .big {
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.05;
+    margin-bottom: var(--sp-4);
+    color: var(--fg-primary);
+  }
+  .script-card .body {
+    font-size: var(--t-sm);
+    line-height: var(--lh-loose);
+    color: var(--fg-secondary);
+    margin-bottom: var(--sp-5);
+  }
+  .script-card .weights {
+    display: flex; gap: var(--sp-4);
+    font-family: var(--font-display);
+    font-size: var(--t-md);
+    color: var(--fg-primary);
+    border-top: 1px solid var(--line);
+    padding-top: var(--sp-5);
+  }
+  .script-card .weights span { color: var(--fg-secondary); }
+
+  .pairing {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    padding: var(--sp-10);
+  }
+  .pairing .row { display: grid; grid-template-columns: 200px 1fr; gap: var(--sp-6); padding: var(--sp-5) 0; border-top: 1px solid var(--line); align-items: baseline; }
+  .pairing .row:first-child { border-top: 0; }
+  .pairing .row .label { font-family: var(--font-mono); font-size: var(--t-xs); letter-spacing: var(--ls-wide); color: var(--fg-muted); text-transform: uppercase; }
+
+  /* ---------- 05 / Icons ---------- */
+  .icon-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: var(--sp-3); }
+  .icon-cell {
+    aspect-ratio: 1;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    background: var(--bg-card);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: var(--sp-3);
+    transition: all var(--dur-2) var(--ease-out);
+    color: var(--fg-primary);
+  }
+  .icon-cell:hover {
+    color: var(--accent);
+    border-color: var(--line-gold);
+    background: var(--accent-soft);
+  }
+  .icon-cell svg { width: 22px; height: 22px; }
+  .icon-cell .n {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: var(--ls-wide);
+    color: var(--fg-muted);
+  }
+
+  .icon-rules { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-4); margin-top: var(--sp-6); }
+  .icon-rule {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    padding: var(--sp-6);
+  }
+  .icon-rule .n {
+    font-family: var(--font-mono);
+    font-size: var(--t-xs);
+    color: var(--accent);
+    margin-bottom: var(--sp-3);
+    letter-spacing: var(--ls-wide);
+  }
+  .icon-rule h5 { margin: 0 0 var(--sp-2); font-size: var(--t-base); font-weight: 600; }
+  .icon-rule p { margin: 0; font-size: var(--t-xs); color: var(--fg-secondary); line-height: var(--lh-loose); }
+
+  /* ---------- 06 / Tokens (spacing, radius, shadow) ---------- */
+  .spacing-row { display: flex; align-items: center; gap: var(--sp-5); padding: var(--sp-3) 0; border-top: 1px solid var(--line); }
+  .spacing-row:first-child { border-top: 0; }
+  .spacing-row .n { font-family: var(--font-mono); font-size: var(--t-xs); color: var(--fg-muted); width: 70px; }
+  .spacing-row .bar { height: 14px; background: var(--accent); }
+  .spacing-row .px { margin-left: auto; font-family: var(--font-mono); font-size: 11px; color: var(--fg-secondary); }
+
+  .radius-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--sp-3); }
+  .radius-cell {
+    aspect-ratio: 1;
+    background: var(--accent-soft);
+    border: 1px solid var(--line-gold);
+    display: flex; align-items: flex-end; justify-content: center;
+    padding: var(--sp-3);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: var(--ls-wide);
+  }
+
+  .shadow-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-4); }
+  .shadow-cell {
+    aspect-ratio: 1.3;
+    background: var(--bg-elevated);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono);
+    font-size: var(--t-xs);
+    color: var(--fg-muted);
+    letter-spacing: var(--ls-wide);
+  }
+  .shadow-cell[data-s="1"] { box-shadow: var(--shadow-1); }
+  .shadow-cell[data-s="2"] { box-shadow: var(--shadow-2); }
+  .shadow-cell[data-s="3"] { box-shadow: var(--shadow-3); }
+  .shadow-cell[data-s="gold"] { box-shadow: var(--shadow-gold); }
+
+  /* ---------- 07 / Components ---------- */
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: var(--sp-2);
+    padding: 10px 18px;
+    border-radius: var(--radius-button);
+    border: 1px solid transparent;
+    font-family: var(--font-body);
+    font-size: var(--t-sm);
+    font-weight: 500;
+    letter-spacing: var(--ls-snug);
+    transition: all var(--dur-2) var(--ease-out);
+    cursor: pointer;
+    line-height: 1;
+  }
+  .btn svg { width: 16px; height: 16px; }
+  .btn-primary { background: var(--accent); color: var(--fg-on-gold); }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-primary:active { background: var(--accent-press); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--fg-primary);
+    border-color: var(--line-strong);
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--fg-secondary);
+    border-color: transparent;
+  }
+  .btn-ghost:hover { color: var(--fg-primary); background: var(--accent-soft); }
+  .btn-soft {
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-color: var(--line-gold);
+  }
+  .btn-soft:hover { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+  .btn-danger { background: var(--error); color: white; }
+  .btn-sm { padding: 6px 12px; font-size: var(--t-xs); }
+  .btn-lg { padding: 14px 24px; font-size: var(--t-md); }
+
+  .btn-row { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; }
+
+  /* Inputs */
+  .field-row { display: grid; gap: var(--sp-2); }
+  .field-row .label { font-family: var(--font-mono); font-size: 11px; letter-spacing: var(--ls-wide); color: var(--fg-secondary); text-transform: uppercase; }
+  .input {
+    background: var(--bg-sunken);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-button);
+    padding: 10px 14px;
+    color: var(--fg-primary);
+    font-family: var(--font-body);
+    font-size: var(--t-sm);
+    transition: all var(--dur-2) var(--ease-out);
+    width: 100%;
+  }
+  .input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .input::placeholder { color: var(--fg-muted); }
+  .input-group { display: flex; }
+  .input-group .input { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+  .input-group .btn-primary { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+
+  .check { display: flex; align-items: center; gap: var(--sp-3); font-size: var(--t-sm); }
+  .check .box {
+    width: 18px; height: 18px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-2);
+    display: flex; align-items: center; justify-content: center;
+    transition: all var(--dur-2) var(--ease-out);
+  }
+  .check.checked .box { background: var(--accent); border-color: var(--accent); color: var(--fg-on-gold); }
+  .check.checked .box svg { width: 12px; height: 12px; }
+  .toggle {
+    width: 36px; height: 20px; padding: 2px;
+    background: var(--ink-700);
+    border-radius: 999px;
+    display: flex; align-items: center;
+    transition: all var(--dur-2) var(--ease-out);
+  }
+  .toggle .dot { width: 16px; height: 16px; background: white; border-radius: 50%; transition: transform var(--dur-2) var(--ease-out); }
+  .toggle.on { background: var(--accent); }
+  .toggle.on .dot { transform: translateX(16px); }
+
+  /* Badges */
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 9px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: var(--ls-wide);
+    border-radius: var(--radius-chip);
+    text-transform: uppercase;
+  }
+  .badge-default { background: var(--ink-800); color: var(--fg-secondary); border: 1px solid var(--line); }
+  .badge-gold    { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--line-gold); }
+  .badge-solid   { background: var(--accent); color: var(--fg-on-gold); }
+  .badge-ok      { background: rgba(107,142,78,0.15); color: var(--ok); border: 1px solid rgba(107,142,78,0.3); }
+  .badge-warn    { background: rgba(201,138,42,0.15); color: var(--warn); border: 1px solid rgba(201,138,42,0.3); }
+  .badge-error   { background: rgba(185,68,43,0.15); color: var(--error); border: 1px solid rgba(185,68,43,0.3); }
+  .badge .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+  /* Cards */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    padding: var(--sp-6);
+    transition: all var(--dur-3) var(--ease-out);
+  }
+  .card:hover { border-color: var(--line-gold); }
+  .card .meta { font-family: var(--font-mono); font-size: 11px; color: var(--accent); letter-spacing: var(--ls-wide); margin-bottom: var(--sp-3); }
+  .card h4 { margin: 0 0 var(--sp-2); font-family: var(--font-display); font-weight: 600; font-size: var(--t-lg); }
+  .card p { margin: 0; font-size: var(--t-sm); color: var(--fg-secondary); line-height: var(--lh-loose); }
+  .card .foot { display: flex; justify-content: space-between; align-items: center; margin-top: var(--sp-5); padding-top: var(--sp-4); border-top: 1px solid var(--line); font-size: var(--t-xs); color: var(--fg-muted); font-family: var(--font-mono); }
+
+  /* Tabs */
+  .tabs { display: flex; border-bottom: 1px solid var(--line); gap: var(--sp-2); }
+  .tabs .tab {
+    padding: 10px 14px;
+    font-size: var(--t-sm);
+    color: var(--fg-secondary);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    cursor: pointer;
+  }
+  .tabs .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* Table */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--t-sm);
+  }
+  .data-table th {
+    text-align: start;
+    padding: var(--sp-3) var(--sp-4);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: var(--ls-wide);
+    color: var(--fg-muted);
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--line-strong);
+    font-weight: 500;
+  }
+  .data-table td {
+    padding: var(--sp-3) var(--sp-4);
+    border-bottom: 1px solid var(--line);
+    color: var(--fg-primary);
+  }
+  .data-table tr:last-child td { border-bottom: 0; }
+  .data-table td.num { font-family: var(--font-mono); color: var(--fg-secondary); }
+
+  /* Avatar */
+  .avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--gold-300), var(--gold-500)); display: inline-flex; align-items: center; justify-content: center; color: var(--fg-on-gold); font-family: var(--font-display); font-weight: 700; font-size: var(--t-sm); }
+
+  /* Nav demo */
+  .nav-demo {
+    display: flex; align-items: center; gap: var(--sp-5);
+    padding: var(--sp-4) var(--sp-5);
+  }
+  .nav-demo .links { display: flex; gap: var(--sp-5); margin-left: var(--sp-6); }
+  .nav-demo .links a { font-size: var(--t-sm); color: var(--fg-secondary); }
+  .nav-demo .links a.active { color: var(--fg-primary); }
+  .nav-demo .actions { margin-left: auto; display: flex; gap: var(--sp-3); align-items: center; }
+
+  /* ---------- 08 / Imagery ---------- */
+  .imagery-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: var(--sp-4); }
+  .img-tile {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    position: relative;
+    aspect-ratio: 1.3;
+  }
+  .img-tile.tall { aspect-ratio: 0.75; grid-row: span 2; }
+  /* Generative imagery — radial gold light, photographic flat textures */
+  .img-tile.photo-arch {
+    background:
+      radial-gradient(ellipse at 70% 80%, rgba(201,161,74,0.6), transparent 60%),
+      radial-gradient(ellipse at 30% 20%, rgba(60,40,15,1), transparent 50%),
+      linear-gradient(180deg, #1a1410 0%, #050505 100%);
+  }
+  .img-tile.photo-arch::after {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(90deg, transparent, transparent 38px, rgba(0,0,0,0.4) 38px, rgba(0,0,0,0.4) 40px);
+    mix-blend-mode: multiply;
+  }
+  .img-tile.photo-grain {
+    background: linear-gradient(140deg, var(--ink-900), var(--ink-950) 70%);
+    overflow: hidden;
+  }
+  .img-tile.photo-grain::before {
+    content: "";
+    position: absolute; inset: -20%;
+    background-image:
+      radial-gradient(circle at 30% 40%, rgba(201,161,74,0.5) 0%, transparent 25%),
+      radial-gradient(circle at 70% 70%, rgba(201,161,74,0.3) 0%, transparent 30%);
+  }
+  .img-tile.photo-grid {
+    background: var(--ink-950);
+  }
+  .img-tile.photo-grid::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(rgba(201,161,74,0.18) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,161,74,0.18) 1px, transparent 1px);
+    background-size: 24px 24px;
+    mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+  }
+  .img-tile.photo-grid::after {
+    content: "";
+    position: absolute;
+    width: 80px; height: 80px;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    border: 1px solid var(--accent);
+    background: radial-gradient(circle at center, var(--accent), transparent 70%);
+    border-radius: 50%;
+  }
+  .img-tile .cap {
+    position: absolute;
+    bottom: var(--sp-3); left: var(--sp-3);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--fg-primary);
+    background: rgba(0,0,0,0.5);
+    padding: 4px 8px;
+    border-radius: var(--r-1);
+    backdrop-filter: blur(4px);
+  }
+  .imagery-do { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-4); margin-top: var(--sp-6); }
+
+  /* ---------- 09 / Motion ---------- */
+  .motion-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-4); }
+  .motion-card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    padding: var(--sp-6);
+  }
+  .motion-card .n { font-family: var(--font-mono); font-size: var(--t-xs); letter-spacing: var(--ls-wide); color: var(--accent); margin-bottom: var(--sp-3); }
+  .motion-card h5 { margin: 0 0 var(--sp-2); font-family: var(--font-display); font-weight: 600; font-size: var(--t-lg); }
+  .motion-card p { font-size: var(--t-sm); color: var(--fg-secondary); line-height: var(--lh-loose); margin: 0 0 var(--sp-5); }
+  .motion-card .demo {
+    height: 80px;
+    background: var(--bg-sunken);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-button);
+    position: relative;
+    overflow: hidden;
+  }
+  .motion-card .demo .ball {
+    position: absolute;
+    top: 50%; left: 12px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    transform: translateY(-50%);
+    animation: 3s infinite var(--ease-out);
+  }
+  .motion-card[data-m="snap"] .demo .ball { animation-name: snap; animation-timing-function: var(--ease-out); }
+  .motion-card[data-m="ease"] .demo .ball { animation-name: ease; animation-timing-function: var(--ease-inout); animation-duration: 2.4s; }
+  .motion-card[data-m="hold"] .demo .ball { animation-name: hold; animation-timing-function: linear; animation-duration: 4s; }
+  @keyframes snap { 0%, 10% { left: 12px; } 60%, 100% { left: calc(100% - 44px); } }
+  @keyframes ease { 0%, 5% { left: 12px; } 50% { left: calc(100% - 44px); } 95%, 100% { left: 12px; } }
+  @keyframes hold { 0%, 30% { left: 12px; opacity: 0; transform: translateY(-50%) scale(0.6); }
+                    40% { opacity: 1; transform: translateY(-50%) scale(1); }
+                    100% { left: calc(100% - 44px); opacity: 1; transform: translateY(-50%) scale(1); } }
+  .timing-table { width: 100%; }
+
+  /* ---------- 10 / Example app ---------- */
+  .example-cta {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    padding: var(--sp-12);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--sp-10);
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .example-cta::before {
+    content: "";
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent-soft) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .example-cta h3 {
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-size: var(--t-3xl);
+    margin: 0 0 var(--sp-3);
+    letter-spacing: var(--ls-tight);
+  }
+  .example-cta p { margin: 0; font-size: var(--t-md); color: var(--fg-secondary); max-width: 50ch; }
+  .example-cta .links { display: flex; flex-direction: column; gap: var(--sp-3); position: relative; z-index: 1; }
+
+  /* ---------- Footer ---------- */
+  footer.docfoot {
+    border-top: var(--bw-hair) solid var(--line);
+    padding: var(--sp-12) var(--sp-12) var(--sp-12) var(--sp-12);
+    margin: var(--sp-16) auto 0;
+    max-width: 1400px;
+  }
+  footer.docfoot .row {
+    display: flex; justify-content: space-between; align-items: end;
+    gap: var(--sp-6);
+  }
+  footer.docfoot .meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--fg-muted);
+    letter-spacing: var(--ls-wide);
+    line-height: var(--lh-loose);
+  }
+  footer.docfoot .big-mark {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(64px, 14vw, 200px);
+    line-height: 0.9;
+    letter-spacing: var(--ls-tight);
+    color: var(--ink-800);
+    margin: var(--sp-12) 0 var(--sp-3);
+    user-select: none;
+  }
+  footer.docfoot .big-mark em {
+    font-style: normal;
+    color: var(--accent);
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ TOP BAR ============ -->
+<header class="topbar">
+  <div class="brand">
+    <svg width="22" height="22" viewBox="0 0 85.23 216.2" fill="currentColor"><use href="assets/logo/keyu-mark.svg#Layer_2"/><path d="M84.73,157.11v33.27a25.31,25.31,0,0,1-50.61,1c0-.33,0-.66,0-1V82.09c-.65-.12-1.3-.26-2-.41A41.15,41.15,0,1,1,82.76,40.3c0,.45,0,.89,0,1.34a41,41,0,0,1-8.49,25,16.31,16.31,0,0,1-3.07.3A15.76,15.76,0,0,1,58.5,60.53a25.23,25.23,0,0,0,8.4-17.2c0-.56.06-1.12.06-1.69A25.32,25.32,0,1,0,41.64,67a25.2,25.2,0,0,0,10.49-2.27A15.82,15.82,0,0,0,65.81,74.94a40.83,40.83,0,0,1-16.46,7.11l-.16,0v75.86l6.22,6.22-4.93,4.93L55.41,174l-5.35,5.35a6.36,6.36,0,0,1,3.62,3.45A6.33,6.33,0,0,1,50,191.27a9.51,9.51,0,0,0,8.82,8.59l.63,0a9.5,9.5,0,0,0,9.17-7,6.22,6.22,0,0,0-3.75-1.23,6.33,6.33,0,0,0,6.33-6.33,7.22,7.22,0,0,0,0-.82A6.34,6.34,0,0,0,65.65,179l-.06-.06,5-5-5-5,2.46-2.45,1.59-1.6v-7.86Z"/><path d="M57.46,41.64a16.61,16.61,0,0,1-.11,1.87,15.15,15.15,0,0,1-1,3.87,12.82,12.82,0,0,1-.87,1.88h0a15.84,15.84,0,1,1,2-7.63Z"/></svg>
+    <span class="name">Keyu.tech</span>
+    <span class="tag">Design System v1.0</span>
+  </div>
+  <nav>
+    <a href="#fundamentals">Fundamentals</a>
+    <a href="#logo">Logo</a>
+    <a href="#color">Color</a>
+    <a href="#type">Type</a>
+    <a href="#components">Components</a>
+    <a href="Keyu Landing.html">↗ Landing</a>
+  </nav>
+  <div class="spacer"></div>
+</header>
+
+<div class="page">
+
+<!-- ============ TOC ============ -->
+<aside class="toc">
+  <div class="toc-label">Contents</div>
+  <ol>
+    <li><span class="num">00</span><a href="#fundamentals">Fundamentals</a></li>
+    <li><span class="num">01</span><a href="#logo">Logo</a></li>
+    <li><span class="num">02</span><a href="#color">Color</a></li>
+    <li><span class="num">03</span><a href="#type">Typography</a></li>
+    <li><span class="num">04</span><a href="#icons">Iconography</a></li>
+    <li><span class="num">05</span><a href="#tokens">Spacing &amp; radii</a></li>
+    <li><span class="num">06</span><a href="#components">Components</a></li>
+    <li><span class="num">07</span><a href="#shadcn">shadcn library</a></li>
+    <li><span class="num">08</span><a href="#imagery">Imagery</a></li>
+    <li><span class="num">09</span><a href="#motion">Motion</a></li>
+    <li><span class="num">10</span><a href="#applied">Applied</a></li>
+  </ol>
+</aside>
+
+<main class="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="eyebrow"><span class="dot"></span> Keyu.tech &middot; brand &amp; product system &middot; v1.0 &middot; 2026</div>
+    <h1>The system<br>behind <em>Keyu</em>.</h1>
+    <p class="sub">Premium, modern, tech-forward. A foundation of black, a single signature gold, Kufi typography that reads natively in Arabic, Kurdish and English — and the components, motion and voice that make every Keyu surface feel of a piece.</p>
+    <div class="hero-meta">
+      <div class="item"><div class="k">Owner</div><div class="v">Keyu.tech</div></div>
+      <div class="item"><div class="k">Founded</div><div class="v">2021, ML &amp; software engineering</div></div>
+      <div class="item"><div class="k">Locales</div><div class="v">EN · AR · KU</div></div>
+      <div class="item"><div class="k">Direction</div><div class="v">Circuit — industrial</div></div>
+    </div>
+  </section>
+
+  <!-- ============ 00 FUNDAMENTALS ============ -->
+  <section id="fundamentals">
+    <header class="sec-head">
+      <div class="sec-eyebrow">00 — Fundamentals</div>
+      <h2 class="sec-title">Mission, pillars, voice.</h2>
+      <p class="sec-lede">Keyu builds custom IT solutions — web, AI, SaaS and data analysis — for businesses navigating the digital age. The brand expresses that work as engineered, considered and quietly premium.</p>
+    </header>
+
+    <div class="frame" style="margin-bottom: var(--sp-6);">
+      <div class="frame-head">
+        <span>Mission</span>
+        <span>01 / 01</span>
+      </div>
+      <div class="frame-body" style="padding: var(--sp-12);">
+        <p style="font-family: var(--font-display); font-weight: 500; font-size: clamp(28px, 3.6vw, 44px); line-height: 1.25; letter-spacing: var(--ls-tight); margin: 0; max-width: 26ch;">
+          To <span style="color: var(--accent);">empower businesses</span> with advanced technology — designing custom solutions that streamline operations, sharpen customer experience, and drive durable growth.
+        </p>
+      </div>
+    </div>
+
+    <div class="pillars" style="margin-bottom: var(--sp-10);">
+      <div class="pillar">
+        <div class="n">01 / Innovation</div>
+        <h3>Forward by default.</h3>
+        <p>ML, modern web, real-time systems. We ship work that wouldn't have been possible a year ago — and that still feels obvious to use.</p>
+      </div>
+      <div class="pillar">
+        <div class="n">02 / Quality</div>
+        <h3>Built to be kept.</h3>
+        <p>Considered architecture, observable systems, clean handoffs. Keyu deliverables are meant to outlast the engagement.</p>
+      </div>
+      <div class="pillar">
+        <div class="n">03 / Partnership</div>
+        <h3>Close to the work.</h3>
+        <p>We embed with clients, not adjacent to them. Decisions move fast because trust is established first.</p>
+      </div>
+      <div class="pillar">
+        <div class="n">04 / Impact</div>
+        <h3>Measured in outcomes.</h3>
+        <p>Pretty doesn't ship. We define the metric on day one and instrument against it from day two.</p>
+      </div>
+    </div>
+
+    <div class="voice">
+      <div class="col yes">
+        <h4>Voice — Yes</h4>
+        <ul>
+          <li>Precise. We use specific verbs and specific numbers, not adjectives.</li>
+          <li>Confident. We state what is true; we don't qualify everything.</li>
+          <li>Quietly premium. Restraint signals capability — we don't oversell.</li>
+          <li>Bilingual-first. Every headline works in Arabic, Kurdish and English.</li>
+          <li>Technical without being insular. We translate, not show off.</li>
+        </ul>
+      </div>
+      <div class="col no">
+        <h4>Voice — No</h4>
+        <ul>
+          <li>Revolutionary, game-changing, paradigm-shifting</li>
+          <li>Synergize, leverage, unlock value</li>
+          <li>AI-powered everything, "next-generation" everything</li>
+          <li>Excessive exclamation marks or hype</li>
+          <li>Emoji in product surfaces or marketing copy</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 01 LOGO ============ -->
+  <section id="logo">
+    <header class="sec-head">
+      <div class="sec-eyebrow">01 — Logo</div>
+      <h2 class="sec-title">The mark, the lockup,<br>the rules.</h2>
+      <p class="sec-lede">The Keyu mark is a stylized key — a circular bow above a notched stem. It reads as access, unlocking, and the first letter of the name. Use it with care: the mark earns its weight by appearing rarely and confidently.</p>
+    </header>
+
+    <div class="logo-hero" style="margin-bottom: var(--sp-6);">
+      <div class="logo-display">
+        <div class="lockup">
+          <svg viewBox="0 0 85.23 216.2" fill="currentColor"><path d="M84.73,157.11v33.27a25.31,25.31,0,0,1-50.61,1c0-.33,0-.66,0-1V82.09c-.65-.12-1.3-.26-2-.41A41.15,41.15,0,1,1,82.76,40.3c0,.45,0,.89,0,1.34a41,41,0,0,1-8.49,25,16.31,16.31,0,0,1-3.07.3A15.76,15.76,0,0,1,58.5,60.53a25.23,25.23,0,0,0,8.4-17.2c0-.56.06-1.12.06-1.69A25.32,25.32,0,1,0,41.64,67a25.2,25.2,0,0,0,10.49-2.27A15.82,15.82,0,0,0,65.81,74.94a40.83,40.83,0,0,1-16.46,7.11l-.16,0v75.86l6.22,6.22-4.93,4.93L55.41,174l-5.35,5.35a6.36,6.36,0,0,1,3.62,3.45A6.33,6.33,0,0,1,50,191.27a9.51,9.51,0,0,0,8.82,8.59l.63,0a9.5,9.5,0,0,0,9.17-7,6.22,6.22,0,0,0-3.75-1.23,6.33,6.33,0,0,0,6.33-6.33,7.22,7.22,0,0,0,0-.82A6.34,6.34,0,0,0,65.65,179l-.06-.06,5-5-5-5,2.46-2.45,1.59-1.6v-7.86Z"/><path d="M57.46,41.64a16.61,16.61,0,0,1-.11,1.87,15.15,15.15,0,0,1-1,3.87,12.82,12.82,0,0,1-.87,1.88h0a15.84,15.84,0,1,1,2-7.63Z"/></svg>
+          <div class="word">Keyu.tech<small>Software &middot; AI &middot; Data</small></div>
+        </div>
+      </div>
+      <div class="logo-rules">
+        <div class="logo-rule">
+          <div class="icon"><svg width="20" height="20"><use href="assets/icons.svg#key"/></svg></div>
+          <div>
+            <h5>Mark or lockup — never both</h5>
+            <p>Use the mark alone in product chrome, favicons and avatars. Use the horizontal lockup in headers, signatures and marketing.</p>
+          </div>
+        </div>
+        <div class="logo-rule">
+          <div class="icon"><svg width="20" height="20"><use href="assets/icons.svg#grid"/></svg></div>
+          <div>
+            <h5>Minimum size — 24px / 12mm</h5>
+            <p>Below 24px the bit notches collapse. For small contexts use the simplified favicon mark (without the notches).</p>
+          </div>
+        </div>
+        <div class="logo-rule">
+          <div class="icon"><svg width="20" height="20"><use href="assets/icons.svg#shield"/></svg></div>
+          <div>
+            <h5>Clearspace — 1x the bow</h5>
+            <p>The diameter of the circular bow defines the minimum padding on all four sides. More is always allowed.</p>
+          </div>
+        </div>
+        <div class="logo-rule">
+          <div class="icon"><svg width="20" height="20"><use href="assets/icons.svg#sparkle"/></svg></div>
+          <div>
+            <h5>Gold is the hero</h5>
+            <p>On dark surfaces the mark is gold. On gold or paper it is black. White is reserved for monochrome contexts (print on press, etched metal).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="logo-variants" style="margin-bottom: var(--sp-10);">
+      <div class="v" data-bg="black">
+        <div class="swatch"><svg viewBox="0 0 85.23 216.2" style="color: var(--accent);"><path d="M84.73,157.11v33.27a25.31,25.31,0,0,1-50.61,1c0-.33,0-.66,0-1V82.09c-.65-.12-1.3-.26-2-.41A41.15,41.15,0,1,1,82.76,40.3c0,.45,0,.89,0,1.34a41,41,0,0,1-8.49,25,16.31,16.31,0,0,1-3.07.3A15.76,15.76,0,0,1,58.5,60.53a25.23,25.23,0,0,0,8.4-17.2c0-.56.06-1.12.06-1.69A25.32,25.32,0,1,0,41.64,67a25.2,25.2,0,0,0,10.49-2.27A15.82,15.82,0,0,0,65.81,74.94a40.83,40.83,0,0,1-16.46,7.11l-.16,0v75.86l6.22,6.22-4.93,4.93L55.41,174l-5.35,5.35a6.36,6.36,0,0,1,3.62,3.45A6.33,6.33,0,0,1,50,191.27a9.51,9.51,0,0,0,8.82,8.59l.63,0a9.5,9.5,0,0,0,9.17-7,6.22,6.22,0,0,0-3.75-1.23,6.33,6.33,0,0,0,6.33-6.33,7.22,7.22,0,0,0,0-.82A6.34,6.34,0,0,0,65.65,179l-.06-.06,5-5-5-5,2.46-2.45,1.59-1.6v-7.86Z" fill="currentColor"/><path d="M57.46,41.64a16.61,16.61,0,0,1-.11,1.87,15.15,15.15,0,0,1-1,3.87,12.82,12.82,0,0,1-.87,1.88h0a15.84,15.84,0,1,1,2-7.63Z" fill="currentColor"/></svg></div>
+        <div class="label"><span class="name">Primary</span><span>Gold on Ink</span></div>
+      </div>
+      <div class="v" data-bg="gold">
+        <div class="swatch"><svg viewBox="0 0 85.23 216.2" style="color: var(--ink-950);"><path d="M84.73,157.11v33.27a25.31,25.31,0,0,1-50.61,1c0-.33,0-.66,0-1V82.09c-.65-.12-1.3-.26-2-.41A41.15,41.15,0,1,1,82.76,40.3c0,.45,0,.89,0,1.34a41,41,0,0,1-8.49,25,16.31,16.31,0,0,1-3.07.3A15.76,15.76,0,0,1,58.5,60.53a25.23,25.23,0,0,0,8.4-17.2c0-.56.06-1.12.06-1.69A25.32,25.32,0,1,0,41.64,67a25.2,25.2,0,0,0,10.49-2.27A15.82,15.82,0,0,0,65.81,74.94a40.83,40.83,0,0,1-16.46,7.11l-.16,0v75.86l6.22,6.22-4.93,4.93L55.41,174l-5.35,5.35a6.36,6.36,0,0,1,3.62,3.45A6.33,6.33,0,0,1,50,191.27a9.51,9.51,0,0,0,8.82,8.59l.63,0a9.5,9.5,0,0,0,9.17-7,6.22,6.22,0,0,0-3.75-1.23,6.33,6.33,0,0,0,6.33-6.33,7.22,7.22,0,0,0,0-.82A6.34,6.34,0,0,0,65.65,179l-.06-.06,5-5-5-5,2.46-2.45,1.59-1.6v-7.86Z" fill="currentColor"/><path d="M57.46,41.64a16.61,16.61,0,0,1-.11,1.87,15.15,15.15,0,0,1-1,3.87,12.82,12.82,0,0,1-.87,1.88h0a15.84,15.84,0,1,1,2-7.63Z" fill="currentColor"/></svg></div>
+        <div class="label"><span class="name">Reverse</span><span>Ink on Gold</span></div>
+      </div>
+      <div class="v" data-bg="paper">
+        <div class="swatch"><svg viewBox="0 0 85.23 216.2" style="color: var(--ink-950);"><path d="M84.73,157.11v33.27a25.31,25.31,0,0,1-50.61,1c0-.33,0-.66,0-1V82.09c-.65-.12-1.3-.26-2-.41A41.15,41.15,0,1,1,82.76,40.3c0,.45,0,.89,0,1.34a41,41,0,0,1-8.49,25,16.31,16.31,0,0,1-3.07.3A15.76,15.76,0,0,1,58.5,60.53a25.23,25.23,0,0,0,8.4-17.2c0-.56.06-1.12.06-1.69A25.32,25.32,0,1,0,41.64,67a25.2,25.2,0,0,0,10.49-2.27A15.82,15.82,0,0,0,65.81,74.94a40.83,40.83,0,0,1-16.46,7.11l-.16,0v75.86l6.22,6.22-4.93,4.93L55.41,174l-5.35,5.35a6.36,6.36,0,0,1,3.62,3.45A6.33,6.33,0,0,1,50,191.27a9.51,9.51,0,0,0,8.82,8.59l.63,0a9.5,9.5,0,0,0,9.17-7,6.22,6.22,0,0,0-3.75-1.23,6.33,6.33,0,0,0,6.33-6.33,7.22,7.22,0,0,0,0-.82A6.34,6.34,0,0,0,65.65,179l-.06-.06,5-5-5-5,2.46-2.45,1.59-1.6v-7.86Z" fill="currentColor"/><path d="M57.46,41.64a16.61,16.61,0,0,1-.11,1.87,15.15,15.15,0,0,1-1,3.87,12.82,12.82,0,0,1-.87,1.88h0a15.84,15.84,0,1,1,2-7.63Z" fill="currentColor"/></svg></div>
+        <div class="label"><span class="name">Mono</span><span>Ink on Paper</span></div>
+      </div>
+      <div class="v" data-bg="elev">
+        <div class="swatch"><svg viewBox="0 0 85.23 216.2" style="color: var(--fg-primary);"><path d="M84.73,157.11v33.27a25.31,25.31,0,0,1-50.61,1c0-.33,0-.66,0-1V82.09c-.65-.12-1.3-.26-2-.41A41.15,41.15,0,1,1,82.76,40.3c0,.45,0,.89,0,1.34a41,41,0,0,1-8.49,25,16.31,16.31,0,0,1-3.07.3A15.76,15.76,0,0,1,58.5,60.53a25.23,25.23,0,0,0,8.4-17.2c0-.56.06-1.12.06-1.69A25.32,25.32,0,1,0,41.64,67a25.2,25.2,0,0,0,10.49-2.27A15.82,15.82,0,0,0,65.81,74.94a40.83,40.83,0,0,1-16.46,7.11l-.16,0v75.86l6.22,6.22-4.93,4.93L55.41,174l-5.35,5.35a6.36,6.36,0,0,1,3.62,3.45A6.33,6.33,0,0,1,50,191.27a9.51,9.51,0,0,0,8.82,8.59l.63,0a9.5,9.5,0,0,0,9.17-7,6.22,6.22,0,0,0-3.75-1.23,6.33,6.33,0,0,0,6.33-6.33,7.22,7.22,0,0,0,0-.82A6.34,6.34,0,0,0,65.65,179l-.06-.06,5-5-5-5,2.46-2.45,1.59-1.6v-7.86Z" fill="currentColor"/><path d="M57.46,41.64a16.61,16.61,0,0,1-.11,1.87,15.15,15.15,0,0,1-1,3.87,12.82,12.82,0,0,1-.87,1.88h0a15.84,15.84,0,1,1,2-7.63Z" fill="currentColor"/></svg></div>
+        <div class="label"><span class="name">Knockout</span><span>White / etched</span></div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom: var(--sp-6);">
+      <div>
+        <div class="frame-head" style="border: 1px solid var(--line); border-bottom: 0; border-radius: var(--radius-card) var(--radius-card) 0 0;"><span>Clearspace</span><span>X = bow diameter</span></div>
+        <div class="clearspace" style="border-top-left-radius: 0; border-top-right-radius: 0;">
+          <div class="clearspace-rig">
+            <div class="mark-wrap">
+              <svg viewBox="0 0 85.23 216.2" fill="currentColor"><path d="M84.73,157.11v33.27a25.31,25.31,0,0,1-50.61,1c0-.33,0-.66,0-1V82.09c-.65-.12-1.3-.26-2-.41A41.15,41.15,0,1,1,82.76,40.3c0,.45,0,.89,0,1.34a41,41,0,0,1-8.49,25,16.31,16.31,0,0,1-3.07.3A15.76,15.76,0,0,1,58.5,60.53a25.23,25.23,0,0,0,8.4-17.2c0-.56.06-1.12.06-1.69A25.32,25.32,0,1,0,41.64,67a25.2,25.2,0,0,0,10.49-2.27A15.82,15.82,0,0,0,65.81,74.94a40.83,40.83,0,0,1-16.46,7.11l-.16,0v75.86l6.22,6.22-4.93,4.93L55.41,174l-5.35,5.35a6.36,6.36,0,0,1,3.62,3.45A6.33,6.33,0,0,1,50,191.27a9.51,9.51,0,0,0,8.82,8.59l.63,0a9.5,9.5,0,0,0,9.17-7,6.22,6.22,0,0,0-3.75-1.23,6.33,6.33,0,0,0,6.33-6.33,7.22,7.22,0,0,0,0-.82A6.34,6.34,0,0,0,65.65,179l-.06-.06,5-5-5-5,2.46-2.45,1.59-1.6v-7.86Z"/><path d="M57.46,41.64a16.61,16.61,0,0,1-.11,1.87,15.15,15.15,0,0,1-1,3.87,12.82,12.82,0,0,1-.87,1.88h0a15.84,15.84,0,1,1,2-7.63Z"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="frame-head" style="border: 1px solid var(--line); border-bottom: 0; border-radius: var(--radius-card) var(--radius-card) 0 0;"><span>Sizing</span><span>min 24px on screen</span></div>
+        <div class="frame" style="border-top-left-radius: 0; border-top-right-radius: 0; border-top: 0;">
+          <div class="frame-body" style="display: flex; align-items: end; gap: var(--sp-6); justify-content: center; min-height: 280px;">
+            <div style="text-align: center;"><svg viewBox="0 0 85.23 216.2" fill="currentColor" style="color: var(--accent); height: 120px;"><path d="M84.73,157.11v33.27a25.31,25.31,0,0,1-50.61,1c0-.33,0-.66,0-1V82.09c-.65-.12-1.3-.26-2-.41A41.15,41.15,0,1,1,82.76,40.3c0,.45,0,.89,0,1.34a41,41,0,0,1-8.49,25,16.31,16.31,0,0,1-3.07.3A15.76,15.76,0,0,1,58.5,60.53a25.23,25.23,0,0,0,8.4-17.2c0-.56.06-1.12.06-1.69A25.32,25.32,0,1,0,41.64,67a25.2,25.2,0,0,0,10.49-2.27A15.82,15.82,0,0,0,65.81,74.94a40.83,40.83,0,0,1-16.46,7.11l-.16,0v75.86l6.22,6.22-4.93,4.93L55.41,174l-5.35,5.35a6.36,6.36,0,0,1,3.62,3.45A6.33,6.33,0,0,1,50,191.27a9.51,9.51,0,0,0,8.82,8.59l.63,0a9.5,9.5,0,0,0,9.17-7,6.22,6.22,0,0,0-3.75-1.23,6.33,6.33,0,0,0,6.33-6.33,7.22,7.22,0,0,0,0-.82A6.34,6.34,0,0,0,65.65,179l-.06-.06,5-5-5-5,2.46-2.45,1.59-1.6v-7.86Z"/><path d="M57.46,41.64a16.61,16.61,0,0,1-.11,1.87,15.15,15.15,0,0,1-1,3.87,12.82,12.82,0,0,1-.87,1.88h0a15.84,15.84,0,1,1,2-7.63Z"/></svg><div style="font-family: var(--font-mono); font-size: 10px; color: var(--fg-muted); margin-top: 8px; letter-spacing: var(--ls-wide);">DISPLAY · 120PX</div></div>
+            <div style="text-align: center;"><svg viewBox="0 0 85.23 216.2" fill="currentColor" style="color: var(--accent); height: 56px;"><path d="M84.73,157.11v33.27a25.31,25.31,0,0,1-50.61,1c0-.33,0-.66,0-1V82.09c-.65-.12-1.3-.26-2-.41A41.15,41.15,0,1,1,82.76,40.3c0,.45,0,.89,0,1.34a41,41,0,0,1-8.49,25,16.31,16.31,0,0,1-3.07.3A15.76,15.76,0,0,1,58.5,60.53a25.23,25.23,0,0,0,8.4-17.2c0-.56.06-1.12.06-1.69A25.32,25.32,0,1,0,41.64,67a25.2,25.2,0,0,0,10.49-2.27A15.82,15.82,0,0,0,65.81,74.94a40.83,40.83,0,0,1-16.46,7.11l-.16,0v75.86l6.22,6.22-4.93,4.93L55.41,174l-5.35,5.35a6.36,6.36,0,0,1,3.62,3.45A6.33,6.33,0,0,1,50,191.27a9.51,9.51,0,0,0,8.82,8.59l.63,0a9.5,9.5,0,0,0,9.17-7,6.22,6.22,0,0,0-3.75-1.23,6.33,6.33,0,0,0,6.33-6.33,7.22,7.22,0,0,0,0-.82A6.34,6.34,0,0,0,65.65,179l-.06-.06,5-5-5-5,2.46-2.45,1.59-1.6v-7.86Z"/><path d="M57.46,41.64a16.61,16.61,0,0,1-.11,1.87,15.15,15.15,0,0,1-1,3.87,12.82,12.82,0,0,1-.87,1.88h0a15.84,15.84,0,1,1,2-7.63Z"/></svg><div style="font-family: var(--font-mono); font-size: 10px; color: var(--fg-muted); margin-top: 8px; letter-spacing: var(--ls-wide);">UI · 56PX</div></div>
+            <div style="text-align: center;"><svg viewBox="0 0 85.23 216.2" fill="currentColor" style="color: var(--accent); height: 24px;"><path d="M84.73,157.11v33.27a25.31,25.31,0,0,1-50.61,1c0-.33,0-.66,0-1V82.09c-.65-.12-1.3-.26-2-.41A41.15,41.15,0,1,1,82.76,40.3c0,.45,0,.89,0,1.34a41,41,0,0,1-8.49,25,16.31,16.31,0,0,1-3.07.3A15.76,15.76,0,0,1,58.5,60.53a25.23,25.23,0,0,0,8.4-17.2c0-.56.06-1.12.06-1.69A25.32,25.32,0,1,0,41.64,67a25.2,25.2,0,0,0,10.49-2.27A15.82,15.82,0,0,0,65.81,74.94a40.83,40.83,0,0,1-16.46,7.11l-.16,0v75.86l6.22,6.22-4.93,4.93L55.41,174l-5.35,5.35a6.36,6.36,0,0,1,3.62,3.45A6.33,6.33,0,0,1,50,191.27a9.51,9.51,0,0,0,8.82,8.59l.63,0a9.5,9.5,0,0,0,9.17-7,6.22,6.22,0,0,0-3.75-1.23,6.33,6.33,0,0,0,6.33-6.33,7.22,7.22,0,0,0,0-.82A6.34,6.34,0,0,0,65.65,179l-.06-.06,5-5-5-5,2.46-2.45,1.59-1.6v-7.86Z"/><path d="M57.46,41.64a16.61,16.61,0,0,1-.11,1.87,15.15,15.15,0,0,1-1,3.87,12.82,12.82,0,0,1-.87,1.88h0a15.84,15.84,0,1,1,2-7.63Z"/></svg><div style="font-family: var(--font-mono); font-size: 10px; color: var(--fg-muted); margin-top: 8px; letter-spacing: var(--ls-wide);">MIN · 24PX</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="misuse">
+      <div class="m" data-do="stretch"><div class="demo"><svg viewBox="0 0 85.23 216.2" fill="currentColor"><path d="M84.73,157.11v33.27a25.31,25.31,0,0,1-50.61,1c0-.33,0-.66,0-1V82.09c-.65-.12-1.3-.26-2-.41A41.15,41.15,0,1,1,82.76,40.3c0,.45,0,.89,0,1.34a41,41,0,0,1-8.49,25,16.31,16.31,0,0,1-3.07.3A15.76,15.76,0,0,1,58.5,60.53a25.23,25.23,0,0,0,8.4-17.2c0-.56.06-1.12.06-1.69A25.32,25.32,0,1,0,41.64,67a25.2,25.2,0,0,0,10.49-2.27A15.82,15.82,0,0,0,65.81,74.94a40.83,40.83,0,0,1-16.46,7.11l-.16,0v75.86l6.22,6.22-4.93,4.93L55.41,174l-5.35,5.35a6.36,6.36,0,0,1,3.62,3.45A6.33,6.33,0,0,1,50,191.27a9.51,9.51,0,0,0,8.82,8.59l.63,0a9.5,9.5,0,0,0,9.17-7,6.22,6.22,0,0,0-3.75-1.23,6.33,6.33,0,0,0,6.33-6.33,7.22,7.22,0,0,0,0-.82A6.34,6.34,0,0,0,65.65,179l-.06-.06,5-5-5-5,2.46-2.45,1.59-1.6v-7.86Z"/><path d="M57.46,41.64a16.61,16.61,0,0,1-.11,1.87,15.15,15.15,0,0,1-1,3.87,12.82,12.82,0,0,1-.87,1.88h0a15.84,15.84,0,1,1,2-7.63Z"/></svg></div><div class="label"><strong>Don't</strong> &middot; stretch</div></div>
+      <div class="m" data-do="rotate"><div class="demo"><svg viewBox="0 0 85.23 216.2" fill="currentColor"><path d="M84.73,157.11v33.27a25.31,25.31,0,0,1-50.61,1c0-.33,0-.66,0-1V82.09c-.65-.12-1.3-.26-2-.41A41.15,41.15,0,1,1,82.76,40.3c0,.45,0,.89,0,1.34a41,41,0,0,1-8.49,25,16.31,16.31,0,0,1-3.07.3A15.76,15.76,0,0,1,58.5,60.53a25.23,25.23,0,0,0,8.4-17.2c0-.56.06-1.12.06-1.69A25.32,25.32,0,1,0,41.64,67a25.2,25.2,0,0,0,10.49-2.27A15.82,15.82,0,0,0,65.81,74.94a40.83,40.83,0,0,1-16.46,7.11l-.16,0v75.86l6.22,6.22-4.93,4.93L55.41,174l-5.35,5.35a6.36,6.36,0,0,1,3.62,3.45A6.33,6.33,0,0,1,50,191.27a9.51,9.51,0,0,0,8.82,8.59l.63,0a9.5,9.5,0,0,0,9.17-7,6.22,6.22,0,0,0-3.75-1.23,6.33,6.33,0,0,0,6.33-6.33,7.22,7.22,0,0,0,0-.82A6.34,6.34,0,0,0,65.65,179l-.06-.06,5-5-5-5,2.46-2.45,1.59-1.6v-7.86Z"/><path d="M57.46,41.64a16.61,16.61,0,0,1-.11,1.87,15.15,15.15,0,0,1-1,3.87,12.82,12.82,0,0,1-.87,1.88h0a15.84,15.84,0,1,1,2-7.63Z"/></svg></div><div class="label"><strong>Don't</strong> &middot; rotate</div></div>
+      <div class="m" data-do="color"><div class="demo"><svg viewBox="0 0 85.23 216.2" fill="currentColor"><path d="M84.73,157.11v33.27a25.31,25.31,0,0,1-50.61,1c0-.33,0-.66,0-1V82.09c-.65-.12-1.3-.26-2-.41A41.15,41.15,0,1,1,82.76,40.3c0,.45,0,.89,0,1.34a41,41,0,0,1-8.49,25,16.31,16.31,0,0,1-3.07.3A15.76,15.76,0,0,1,58.5,60.53a25.23,25.23,0,0,0,8.4-17.2c0-.56.06-1.12.06-1.69A25.32,25.32,0,1,0,41.64,67a25.2,25.2,0,0,0,10.49-2.27A15.82,15.82,0,0,0,65.81,74.94a40.83,40.83,0,0,1-16.46,7.11l-.16,0v75.86l6.22,6.22-4.93,4.93L55.41,174l-5.35,5.35a6.36,6.36,0,0,1,3.62,3.45A6.33,6.33,0,0,1,50,191.27a9.51,9.51,0,0,0,8.82,8.59l.63,0a9.5,9.5,0,0,0,9.17-7,6.22,6.22,0,0,0-3.75-1.23,6.33,6.33,0,0,0,6.33-6.33,7.22,7.22,0,0,0,0-.82A6.34,6.34,0,0,0,65.65,179l-.06-.06,5-5-5-5,2.46-2.45,1.59-1.6v-7.86Z"/><path d="M57.46,41.64a16.61,16.61,0,0,1-.11,1.87,15.15,15.15,0,0,1-1,3.87,12.82,12.82,0,0,1-.87,1.88h0a15.84,15.84,0,1,1,2-7.63Z"/></svg></div><div class="label"><strong>Don't</strong> &middot; recolor</div></div>
+      <div class="m" data-do="bg"><div class="demo"><svg viewBox="0 0 85.23 216.2" fill="currentColor" style="color: var(--accent);"><path d="M84.73,157.11v33.27a25.31,25.31,0,0,1-50.61,1c0-.33,0-.66,0-1V82.09c-.65-.12-1.3-.26-2-.41A41.15,41.15,0,1,1,82.76,40.3c0,.45,0,.89,0,1.34a41,41,0,0,1-8.49,25,16.31,16.31,0,0,1-3.07.3A15.76,15.76,0,0,1,58.5,60.53a25.23,25.23,0,0,0,8.4-17.2c0-.56.06-1.12.06-1.69A25.32,25.32,0,1,0,41.64,67a25.2,25.2,0,0,0,10.49-2.27A15.82,15.82,0,0,0,65.81,74.94a40.83,40.83,0,0,1-16.46,7.11l-.16,0v75.86l6.22,6.22-4.93,4.93L55.41,174l-5.35,5.35a6.36,6.36,0,0,1,3.62,3.45A6.33,6.33,0,0,1,50,191.27a9.51,9.51,0,0,0,8.82,8.59l.63,0a9.5,9.5,0,0,0,9.17-7,6.22,6.22,0,0,0-3.75-1.23,6.33,6.33,0,0,0,6.33-6.33,7.22,7.22,0,0,0,0-.82A6.34,6.34,0,0,0,65.65,179l-.06-.06,5-5-5-5,2.46-2.45,1.59-1.6v-7.86Z"/><path d="M57.46,41.64a16.61,16.61,0,0,1-.11,1.87,15.15,15.15,0,0,1-1,3.87,12.82,12.82,0,0,1-.87,1.88h0a15.84,15.84,0,1,1,2-7.63Z"/></svg></div><div class="label"><strong>Don't</strong> &middot; busy bg</div></div>
+    </div>
+  </section>
+
+  <!-- ============ 02 COLOR ============ -->
+  <section id="color">
+    <header class="sec-head">
+      <div class="sec-eyebrow">02 — Color</div>
+      <h2 class="sec-title">Black, gold,<br>and the room in between.</h2>
+      <p class="sec-lede">Circuit is a study in restraint: deep neutrals carry 90% of the surface, a single bright gold carries everything that matters. The palette is dense, industrial, and tuned for technical UI.</p>
+    </header>
+
+    <div class="direction-cols" style="margin-bottom: var(--sp-10); grid-template-columns: 1fr;">
+      <div class="dir-card">
+        <div class="head"><div class="name">Circuit</div><div class="tag">Industrial · technical · the Keyu direction</div></div>
+        <div class="swatch" style="background: #0B0C0E;"><div class="meta" style="color: rgba(255,255,255,0.5);">#0B0C0E &middot; deep ink · page canvas</div></div>
+        <div class="chips">
+          <div class="chip dark" style="background: #E8B833;">#E8B833 · accent</div>
+          <div class="chip dark" style="background: #C99A20;">#C99A20 · press</div>
+          <div class="chip light" style="background: #E8E6DD;">#E8E6DD · fg</div>
+          <div class="chip dark" style="background: #131418;">#131418 · elevated</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-family: var(--font-display); font-size: var(--t-xl); margin: 0 0 var(--sp-5); letter-spacing: var(--ls-snug);">Primitive scales</h3>
+    <div class="frame" style="margin-bottom: var(--sp-10);">
+      <div class="frame-body tight">
+        <div class="palette-row">
+          <span class="label">Gold</span>
+          <div class="ramp">
+            <div class="step light" data-step="50" style="background: #FAF3DC;"></div>
+            <div class="step light" data-step="100" style="background: #F2E3A8;"></div>
+            <div class="step light" data-step="200" style="background: #E8CE74;"></div>
+            <div class="step light" data-step="300" style="background: #DDB94A;"></div>
+            <div class="step dark"  data-step="400" style="background: #C9A14A;"></div>
+            <div class="step dark"  data-step="500" style="background: #B8902F;"></div>
+            <div class="step dark"  data-step="600" style="background: #8C6B1F;"></div>
+            <div class="step dark"  data-step="700" style="background: #5E4612;"></div>
+          </div>
+        </div>
+        <div class="palette-row">
+          <span class="label">Ink</span>
+          <div class="ramp">
+            <div class="step light" data-step="25"  style="background: #FAF8F2;"></div>
+            <div class="step light" data-step="100" style="background: #E8E6DD;"></div>
+            <div class="step light" data-step="200" style="background: #C8C8C8;"></div>
+            <div class="step light" data-step="300" style="background: #A0A0A0;"></div>
+            <div class="step dark"  data-step="500" style="background: #5A5A5A;"></div>
+            <div class="step dark"  data-step="700" style="background: #232323;"></div>
+            <div class="step dark"  data-step="900" style="background: #111111;"></div>
+            <div class="step dark"  data-step="1000" style="background: #050505;"></div>
+          </div>
+        </div>
+        <div class="palette-row">
+          <span class="label">Status</span>
+          <div class="ramp">
+            <div class="step dark" data-step="ok"    style="background: #6B8E4E;"></div>
+            <div class="step dark" data-step="warn"  style="background: #C98A2A;"></div>
+            <div class="step dark" data-step="error" style="background: #B9442B;"></div>
+            <div class="step dark" data-step="info"  style="background: #4A6E8A;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-family: var(--font-display); font-size: var(--t-xl); margin: 0 0 var(--sp-5); letter-spacing: var(--ls-snug);">Semantic tokens <span style="color: var(--fg-muted); font-size: var(--t-sm); font-family: var(--font-mono); font-weight: 400;">— current direction</span></h3>
+    <div class="semantic-tokens">
+      <div class="row"><div class="swatch" style="background: var(--bg-canvas);"></div><div class="name">--bg-canvas</div><div class="desc">Page background. Holds the surface for everything else.</div><div class="val" id="v-bg-canvas">—</div></div>
+      <div class="row"><div class="swatch" style="background: var(--bg-elevated);"></div><div class="name">--bg-elevated</div><div class="desc">One level up: cards, dropdowns, popovers.</div><div class="val" id="v-bg-elevated">—</div></div>
+      <div class="row"><div class="swatch" style="background: var(--bg-sunken);"></div><div class="name">--bg-sunken</div><div class="desc">Wells, code blocks, input fills.</div><div class="val" id="v-bg-sunken">—</div></div>
+      <div class="row"><div class="swatch" style="background: var(--accent);"></div><div class="name">--accent</div><div class="desc">Primary CTA, focus, brand emphasis.</div><div class="val" id="v-accent">—</div></div>
+      <div class="row"><div class="swatch" style="background: var(--fg-primary);"></div><div class="name">--fg-primary</div><div class="desc">Body and heading text on canvas.</div><div class="val" id="v-fg-primary">—</div></div>
+      <div class="row"><div class="swatch" style="background: var(--fg-secondary);"></div><div class="name">--fg-secondary</div><div class="desc">Supporting copy, secondary text.</div><div class="val" id="v-fg-secondary">—</div></div>
+      <div class="row"><div class="swatch" style="background: var(--line);"></div><div class="name">--line</div><div class="desc">Hairline rules and dividers.</div><div class="val" id="v-line">—</div></div>
+      <div class="row"><div class="swatch" style="background: var(--line-gold);"></div><div class="name">--line-gold</div><div class="desc">Focus rings, gold-edged surfaces.</div><div class="val" id="v-line-gold">—</div></div>
+    </div>
+  </section>
+
+  <!-- ============ 03 TYPE ============ -->
+  <section id="type">
+    <header class="sec-head">
+      <div class="sec-eyebrow">03 — Typography</div>
+      <h2 class="sec-title">Kufi, native.<br>Geist, supporting.</h2>
+      <p class="sec-lede">Noto Kufi Arabic is the system's voice. It's geometric and modern in Arabic, confident and architectural in Latin — and it carries Kurdish (Sorani) cleanly. Geist Sans pairs alongside it for dense UI and body copy. Geist Mono is used sparingly for metadata, code, and labels.</p>
+    </header>
+
+    <div class="type-hero" style="margin-bottom: var(--sp-6);">
+      <div class="glyph">Aa &nbsp; کـ &nbsp; ك<small>NOTO KUFI ARABIC &middot; 400 / 500 / 700 / 900</small></div>
+    </div>
+
+    <h3 style="font-family: var(--font-display); font-size: var(--t-xl); margin: var(--sp-6) 0 var(--sp-5); letter-spacing: var(--ls-snug);">Three scripts, one system</h3>
+    <div class="scripts-grid" style="margin-bottom: var(--sp-10);">
+      <div class="script-card">
+        <div class="label"><span>English</span><span class="dir">LTR · Latin</span></div>
+        <div class="big">Custom AI &amp; SaaS solutions.</div>
+        <div class="body">We build durable systems for businesses navigating the digital age — from machine-learning pipelines to revenue-grade web apps.</div>
+        <div class="weights"><span>300</span><span>400</span><span>500</span><span>700</span><span>900</span></div>
+      </div>
+      <div class="script-card" dir="rtl" lang="ar">
+        <div class="label" dir="ltr"><span>Arabic</span><span class="dir">RTL · العربية</span></div>
+        <div class="big">حلولٌ مُخصَّصة للذكاء الاصطناعي</div>
+        <div class="body">نُشيِّد أنظمةً متينةً للأعمال التي ترسم طريقها في العصر الرقمي — من خطوط تعلّم الآلة إلى تطبيقات الويب على مستوى الإنتاج.</div>
+        <div class="weights" dir="ltr"><span>300</span><span>400</span><span>500</span><span>700</span><span>900</span></div>
+      </div>
+      <div class="script-card" dir="rtl" lang="ku">
+        <div class="label" dir="ltr"><span>Kurdish</span><span class="dir">RTL · کوردی</span></div>
+        <div class="big">چارەسەری تایبەت بۆ AI و SaaS</div>
+        <div class="body">سیستەمە بەهێزەکان دروست دەکەین بۆ ئەو بازرگانیانەی کە لە سەردەمی دیجیتاڵدا ڕێگای خۆیان دەدۆزنەوە — لە پایپ‌لاینی فێرکاری ماشێنەوە تا ئەپلیکەیشنە وێبیە بەرهەمهێنەکان.</div>
+        <div class="weights" dir="ltr"><span>300</span><span>400</span><span>500</span><span>700</span><span>900</span></div>
+      </div>
+    </div>
+
+    <h3 style="font-family: var(--font-display); font-size: var(--t-xl); margin: 0 0 var(--sp-5); letter-spacing: var(--ls-snug);">Scale</h3>
+    <div class="type-scale" style="margin-bottom: var(--sp-10);">
+      <div class="type-row"><div class="name">Display 1</div><div class="meta">112 / 0.95 / -2%</div><div class="specimen" style="font-size: 112px; font-weight: 800; line-height: 0.95; letter-spacing: -0.02em;">Keyu.</div></div>
+      <div class="type-row"><div class="name">Display 2</div><div class="meta">84 / 1.0 / -2%</div><div class="specimen" style="font-size: 84px; font-weight: 700; line-height: 1.0; letter-spacing: -0.02em;">Built to be kept.</div></div>
+      <div class="type-row"><div class="name">H1</div><div class="meta">64 / 1.05 / -1%</div><div class="specimen" style="font-size: 64px; font-weight: 700; line-height: 1.05; letter-spacing: -0.01em;">Custom AI &amp; SaaS.</div></div>
+      <div class="type-row"><div class="name">H2</div><div class="meta">48 / 1.1 / -1%</div><div class="specimen" style="font-size: 48px; font-weight: 600; line-height: 1.1;">Engineered for clarity.</div></div>
+      <div class="type-row"><div class="name">H3</div><div class="meta">30 / 1.2 / 0</div><div class="specimen" style="font-size: 30px; font-weight: 600;">Section heading</div></div>
+      <div class="type-row"><div class="name">H4</div><div class="meta">20 / 1.3 / 0</div><div class="specimen" style="font-size: 20px; font-weight: 600;">Card title or subheading</div></div>
+      <div class="type-row"><div class="name">Body L</div><div class="meta">18 / 1.55 / 0</div><div class="specimen" style="font-size: 18px; font-family: var(--font-body); color: var(--fg-secondary);">Long-form reading copy — used in articles, hero subtitles, and high-density narrative sections.</div></div>
+      <div class="type-row"><div class="name">Body</div><div class="meta">16 / 1.5 / 0</div><div class="specimen" style="font-size: 16px; font-family: var(--font-body); color: var(--fg-secondary);">Default UI text. Geist Sans paired with Noto Kufi for Arabic and Kurdish.</div></div>
+      <div class="type-row"><div class="name">Caption</div><div class="meta">12 / 1.4 / 6%</div><div class="specimen" style="font-size: 12px; font-family: var(--font-mono); color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.06em;">METADATA &middot; LABEL &middot; TIMESTAMP</div></div>
+    </div>
+
+    <h3 style="font-family: var(--font-display); font-size: var(--t-xl); margin: 0 0 var(--sp-5); letter-spacing: var(--ls-snug);">Pairing</h3>
+    <div class="pairing">
+      <div class="row">
+        <div class="label">Display</div>
+        <div style="font-family: var(--font-display); font-size: 36px; font-weight: 700; letter-spacing: -0.02em;">Noto Kufi Arabic — 600 / 700 / 800</div>
+      </div>
+      <div class="row">
+        <div class="label">Body</div>
+        <div style="font-family: var(--font-body); font-size: 18px; color: var(--fg-secondary);">Geist Sans — 400 / 500. Slight optical sizing on smaller body. Numerals: tabular for tables, proportional for prose.</div>
+      </div>
+      <div class="row">
+        <div class="label">Mono</div>
+        <div style="font-family: var(--font-mono); font-size: 14px; color: var(--fg-secondary); letter-spacing: 0.04em;">geist mono · 400 / 500 · labels, code, metadata, timestamps</div>
+      </div>
+      <div class="row">
+        <div class="label">Arabic / Kurdish</div>
+        <div style="font-family: var(--font-arabic); font-size: 24px;" dir="rtl">Noto Kufi Arabic عبر جميع الأوزان · کوردی بە هەموو قورساییەکان</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 04 ICONOGRAPHY ============ -->
+  <section id="icons">
+    <header class="sec-head">
+      <div class="sec-eyebrow">04 — Iconography</div>
+      <h2 class="sec-title">Line geometry,<br>1.5px stroke.</h2>
+      <p class="sec-lede">Icons are line-based, drawn on a 24px grid with rounded caps and joins. They share the geometric DNA of the key mark — circles, vertical stems, and clean horizontals — and read at sizes from 16 to 32 pixels without modification.</p>
+    </header>
+
+    <div class="icon-grid">
+      <div class="icon-cell"><svg><use href="assets/icons.svg#key"/></svg><div class="n">KEY</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#shield"/></svg><div class="n">SHIELD</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#lock"/></svg><div class="n">LOCK</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#code"/></svg><div class="n">CODE</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#brain"/></svg><div class="n">BRAIN</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#cloud"/></svg><div class="n">CLOUD</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#chart"/></svg><div class="n">CHART</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#database"/></svg><div class="n">DATABASE</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#cube"/></svg><div class="n">CUBE</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#grid"/></svg><div class="n">GRID</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#sparkle"/></svg><div class="n">SPARKLE</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#zap"/></svg><div class="n">ZAP</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#globe"/></svg><div class="n">GLOBE</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#users"/></svg><div class="n">USERS</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#settings"/></svg><div class="n">SETTINGS</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#search"/></svg><div class="n">SEARCH</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#mail"/></svg><div class="n">MAIL</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#phone"/></svg><div class="n">PHONE</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#arrow-right"/></svg><div class="n">ARROW-R</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#arrow-up-right"/></svg><div class="n">EXTERNAL</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#check"/></svg><div class="n">CHECK</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#close"/></svg><div class="n">CLOSE</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#plus"/></svg><div class="n">PLUS</div></div>
+      <div class="icon-cell"><svg><use href="assets/icons.svg#menu"/></svg><div class="n">MENU</div></div>
+    </div>
+
+    <div class="icon-rules">
+      <div class="icon-rule">
+        <div class="n">01 — Grid</div>
+        <h5>24 × 24, 2px padding</h5>
+        <p>All icons are drawn inside a 20×20 live area on a 24px canvas. Optical balance over mathematical centering when they conflict.</p>
+      </div>
+      <div class="icon-rule">
+        <div class="n">02 — Stroke</div>
+        <h5>1.5px, round caps</h5>
+        <p>Consistent stroke weight across the family. Joins are rounded; corners use a 2px radius. No filled shapes except for solid-icon variants.</p>
+      </div>
+      <div class="icon-rule">
+        <div class="n">03 — Color</div>
+        <h5>currentColor only</h5>
+        <p>Icons inherit color from their context. Use --fg-primary for default, --accent for active, --fg-muted for disabled.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 05 SPACING / RADII / SHADOW ============ -->
+  <section id="tokens">
+    <header class="sec-head">
+      <div class="sec-eyebrow">05 — Spacing, radii &amp; elevation</div>
+      <h2 class="sec-title">A 4-pixel grid,<br>three depths.</h2>
+      <p class="sec-lede">All spacing snaps to a 4-pixel grid. Radii are deliberately sharp — 4px on cards, 2px on buttons — to reinforce the industrial Circuit direction. Shadows are restrained: three steps from hairline to deep.</p>
+    </header>
+
+    <div class="grid-3" style="margin-bottom: var(--sp-10);">
+      <div class="frame">
+        <div class="frame-head"><span>Spacing</span><span>4px base</span></div>
+        <div class="frame-body tight">
+          <div class="spacing-row"><span class="n">sp-1</span><div class="bar" style="width: 4px;"></div><span class="px">4 px</span></div>
+          <div class="spacing-row"><span class="n">sp-2</span><div class="bar" style="width: 8px;"></div><span class="px">8 px</span></div>
+          <div class="spacing-row"><span class="n">sp-3</span><div class="bar" style="width: 12px;"></div><span class="px">12 px</span></div>
+          <div class="spacing-row"><span class="n">sp-4</span><div class="bar" style="width: 16px;"></div><span class="px">16 px</span></div>
+          <div class="spacing-row"><span class="n">sp-6</span><div class="bar" style="width: 24px;"></div><span class="px">24 px</span></div>
+          <div class="spacing-row"><span class="n">sp-8</span><div class="bar" style="width: 32px;"></div><span class="px">32 px</span></div>
+          <div class="spacing-row"><span class="n">sp-12</span><div class="bar" style="width: 48px;"></div><span class="px">48 px</span></div>
+          <div class="spacing-row"><span class="n">sp-16</span><div class="bar" style="width: 64px;"></div><span class="px">64 px</span></div>
+          <div class="spacing-row"><span class="n">sp-24</span><div class="bar" style="width: 96px;"></div><span class="px">96 px</span></div>
+        </div>
+      </div>
+      <div class="frame">
+        <div class="frame-head"><span>Radii</span><span>direction-aware</span></div>
+        <div class="frame-body tight">
+          <div class="radius-grid">
+            <div class="radius-cell" style="border-radius: 0;">0</div>
+            <div class="radius-cell" style="border-radius: 2px;">2</div>
+            <div class="radius-cell" style="border-radius: 4px;">4</div>
+            <div class="radius-cell" style="border-radius: 6px;">6</div>
+            <div class="radius-cell" style="border-radius: 8px;">8</div>
+            <div class="radius-cell" style="border-radius: 12px;">12</div>
+          </div>
+          <p style="font-size: 12px; color: var(--fg-muted); font-family: var(--font-mono); letter-spacing: 0.04em; margin-top: var(--sp-4); line-height: 1.6;">CIRCUIT — 4px on cards, 2px on buttons, pill on chips.</p> / 2 / 2<br>SIGNAL → 0 / 0 / 0</p>
+        </div>
+      </div>
+      <div class="frame">
+        <div class="frame-head"><span>Elevation</span><span>4 levels</span></div>
+        <div class="frame-body tight">
+          <div class="shadow-grid">
+            <div class="shadow-cell" data-s="1">01</div>
+            <div class="shadow-cell" data-s="2">02</div>
+            <div class="shadow-cell" data-s="3">03</div>
+            <div class="shadow-cell" data-s="gold">GOLD</div>
+          </div>
+          <p style="font-size: 12px; color: var(--fg-muted); font-family: var(--font-mono); letter-spacing: 0.04em; margin-top: var(--sp-4); line-height: 1.6;">01 — chips, inputs<br>02 — cards, popovers<br>03 — modals, sheets<br>GOLD — focus, accent surfaces</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 06 COMPONENTS ============ -->
+  <section id="components">
+    <header class="sec-head">
+      <div class="sec-eyebrow">06 — Components</div>
+      <h2 class="sec-title">Buttons, inputs,<br>and what they're for.</h2>
+      <p class="sec-lede">The component library follows the shadcn philosophy: small surface, composable, theme via CSS variables. Every component here is themed by the Circuit token sheet.</p>
+    </header>
+
+    <!-- Buttons -->
+    <div class="frame" style="margin-bottom: var(--sp-6);">
+      <div class="frame-head"><span>Button — variants</span><span>5 styles &middot; 3 sizes</span></div>
+      <div class="frame-body">
+        <div class="btn-row" style="margin-bottom: var(--sp-5);">
+          <button class="btn btn-primary">Get a quote</button>
+          <button class="btn btn-secondary">View work</button>
+          <button class="btn btn-soft">Learn more</button>
+          <button class="btn btn-ghost">Cancel</button>
+          <button class="btn btn-danger">Delete project</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary btn-sm">Small</button>
+          <button class="btn btn-primary">Default <svg><use href="assets/icons.svg#arrow-right"/></svg></button>
+          <button class="btn btn-primary btn-lg">Large action</button>
+          <button class="btn btn-secondary"><svg><use href="assets/icons.svg#sparkle"/></svg> With icon</button>
+          <button class="btn btn-primary" disabled style="opacity: 0.4; cursor: not-allowed;">Disabled</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inputs & forms -->
+    <div class="grid-2" style="margin-bottom: var(--sp-6);">
+      <div class="frame">
+        <div class="frame-head"><span>Input · Form</span><span>focus state in gold</span></div>
+        <div class="frame-body" style="display: grid; gap: var(--sp-5);">
+          <div class="field-row">
+            <span class="label">Email address</span>
+            <input class="input" type="email" placeholder="you@company.com" value="contact@keyu.tech" />
+          </div>
+          <div class="field-row">
+            <span class="label">Subscribe to updates</span>
+            <div class="input-group">
+              <input class="input" type="email" placeholder="email@domain.com" />
+              <button class="btn btn-primary">Subscribe</button>
+            </div>
+          </div>
+          <div class="field-row">
+            <span class="label">Message</span>
+            <textarea class="input" rows="3" placeholder="Tell us about your project..."></textarea>
+          </div>
+          <div style="display: flex; gap: var(--sp-6); align-items: center;">
+            <div class="check checked"><span class="box"><svg><use href="assets/icons.svg#check"/></svg></span> I agree to terms</div>
+            <div class="check"><span class="box"></span> Send me updates</div>
+            <div style="display: flex; align-items: center; gap: var(--sp-3); margin-left: auto;">
+              <span style="font-size: var(--t-sm); color: var(--fg-secondary);">Notifications</span>
+              <div class="toggle on"><div class="dot"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="frame">
+        <div class="frame-head"><span>Badge · Avatar · Toggle</span><span>density elements</span></div>
+        <div class="frame-body" style="display: grid; gap: var(--sp-6);">
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--fg-muted); margin-bottom: var(--sp-3); text-transform: uppercase;">Badges</div>
+            <div class="btn-row">
+              <span class="badge badge-default">Default</span>
+              <span class="badge badge-gold">Featured</span>
+              <span class="badge badge-solid">New</span>
+              <span class="badge badge-ok"><span class="dot"></span>Live</span>
+              <span class="badge badge-warn"><span class="dot"></span>Beta</span>
+              <span class="badge badge-error"><span class="dot"></span>Down</span>
+            </div>
+          </div>
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--fg-muted); margin-bottom: var(--sp-3); text-transform: uppercase;">Avatars</div>
+            <div style="display: flex; gap: -8px;">
+              <span class="avatar" style="margin-right: -10px; border: 2px solid var(--bg-card);">A</span>
+              <span class="avatar" style="background: linear-gradient(135deg, #C9A14A, #5E4612); margin-right: -10px; border: 2px solid var(--bg-card);">K</span>
+              <span class="avatar" style="background: linear-gradient(135deg, #E8B833, #8C6B1F); margin-right: -10px; border: 2px solid var(--bg-card);">N</span>
+              <span class="avatar" style="background: var(--ink-700); color: var(--fg-secondary); margin-right: -10px; border: 2px solid var(--bg-card);">+4</span>
+            </div>
+          </div>
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--fg-muted); margin-bottom: var(--sp-3); text-transform: uppercase;">Tabs</div>
+            <div class="tabs">
+              <div class="tab active">Overview</div>
+              <div class="tab">Engagements</div>
+              <div class="tab">Team</div>
+              <div class="tab">Settings</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="grid-3" style="margin-bottom: var(--sp-6);">
+      <div class="card">
+        <div class="meta">SERVICE / 01</div>
+        <h4>Web Development</h4>
+        <p>Custom-built revenue-grade web applications. From technical architecture to ship.</p>
+        <div class="foot"><span>14 engagements</span><span>→</span></div>
+      </div>
+      <div class="card" style="border-color: var(--line-gold);">
+        <div class="meta" style="display: flex; justify-content: space-between;"><span>SERVICE / 02</span><span class="badge badge-gold" style="font-size: 9px;">Featured</span></div>
+        <h4>AI &amp; Machine Learning</h4>
+        <p>Models, pipelines, evaluation. We embed ML where it pays back — not where it looks good.</p>
+        <div class="foot"><span>9 engagements</span><span>→</span></div>
+      </div>
+      <div class="card">
+        <div class="meta">SERVICE / 03</div>
+        <h4>SaaS &amp; Data Analysis</h4>
+        <p>End-to-end product builds and the analytics that make them measurable.</p>
+        <div class="foot"><span>22 engagements</span><span>→</span></div>
+      </div>
+    </div>
+
+    <!-- Nav + table -->
+    <div class="grid-2" style="margin-bottom: var(--sp-6);">
+      <div class="frame">
+        <div class="frame-head"><span>Top navigation</span><span>marketing site</span></div>
+        <div class="nav-demo">
+          <svg width="22" height="22" viewBox="0 0 85.23 216.2" fill="currentColor" style="color: var(--accent);"><path d="M84.73,157.11v33.27a25.31,25.31,0,0,1-50.61,1c0-.33,0-.66,0-1V82.09c-.65-.12-1.3-.26-2-.41A41.15,41.15,0,1,1,82.76,40.3c0,.45,0,.89,0,1.34a41,41,0,0,1-8.49,25,16.31,16.31,0,0,1-3.07.3A15.76,15.76,0,0,1,58.5,60.53a25.23,25.23,0,0,0,8.4-17.2c0-.56.06-1.12.06-1.69A25.32,25.32,0,1,0,41.64,67a25.2,25.2,0,0,0,10.49-2.27A15.82,15.82,0,0,0,65.81,74.94a40.83,40.83,0,0,1-16.46,7.11l-.16,0v75.86l6.22,6.22-4.93,4.93L55.41,174l-5.35,5.35a6.36,6.36,0,0,1,3.62,3.45A6.33,6.33,0,0,1,50,191.27a9.51,9.51,0,0,0,8.82,8.59l.63,0a9.5,9.5,0,0,0,9.17-7,6.22,6.22,0,0,0-3.75-1.23,6.33,6.33,0,0,0,6.33-6.33,7.22,7.22,0,0,0,0-.82A6.34,6.34,0,0,0,65.65,179l-.06-.06,5-5-5-5,2.46-2.45,1.59-1.6v-7.86Z"/><path d="M57.46,41.64a16.61,16.61,0,0,1-.11,1.87,15.15,15.15,0,0,1-1,3.87,12.82,12.82,0,0,1-.87,1.88h0a15.84,15.84,0,1,1,2-7.63Z"/></svg>
+          <span style="font-family: var(--font-display); font-weight: 700;">Keyu<span style="color: var(--accent);">.</span></span>
+          <div class="links">
+            <a class="active">Services</a><a>Work</a><a>About</a><a>Contact</a>
+          </div>
+          <div class="actions">
+            <button class="btn btn-ghost btn-sm">EN</button>
+            <button class="btn btn-primary btn-sm">Start a project</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="frame">
+        <div class="frame-head"><span>Table</span><span>dense data</span></div>
+        <div class="frame-body tight">
+          <table class="data-table">
+            <thead><tr><th>Project</th><th>Client</th><th>Status</th><th class="num" style="text-align: end;">Value</th></tr></thead>
+            <tbody>
+              <tr><td>Atlas ML</td><td>Banque Saderat</td><td><span class="badge badge-ok"><span class="dot"></span>Live</span></td><td class="num" style="text-align: end;">$284,000</td></tr>
+              <tr><td>Nahla SaaS</td><td>Korek Telecom</td><td><span class="badge badge-warn"><span class="dot"></span>Beta</span></td><td class="num" style="text-align: end;">$120,500</td></tr>
+              <tr><td>Vault Insight</td><td>NEOM Holdings</td><td><span class="badge badge-default">Draft</span></td><td class="num" style="text-align: end;">$78,000</td></tr>
+              <tr><td>Pilot AI</td><td>Aramex MENA</td><td><span class="badge badge-ok"><span class="dot"></span>Live</span></td><td class="num" style="text-align: end;">$311,200</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 07 SHADCN LIBRARY ============ -->
+  <section id="shadcn">
+    <header class="sec-head">
+      <div class="sec-eyebrow">07 — shadcn library</div>
+      <h2 class="sec-title">The full kit,<br>themed to Circuit.</h2>
+      <p class="sec-lede">Every shadcn/ui primitive — re-skinned in Circuit tokens. Sharp 2&ndash;4&thinsp;px corners, gold accent, hairline rules. Use these as the source of truth for product surfaces; they share types and behaviors with the upstream library while reading unmistakably as Keyu.</p>
+    </header>
+
+    <!-- ---------- Forms cluster ---------- -->
+    <h3 style="font-family: var(--font-display); font-size: var(--t-xl); margin: 0 0 var(--sp-5); letter-spacing: var(--ls-snug);">Inputs &amp; form primitives</h3>
+    <div class="sh-grid" style="margin-bottom: var(--sp-10);">
+
+      <!-- Label -->
+      <div class="sh-cell span-3">
+        <div class="sh-head"><span class="name">Label</span><span class="tag">FORM</span></div>
+        <div class="sh-body col start" style="padding-top: var(--sp-6);">
+          <div style="display: grid; gap: var(--sp-3); width: 100%;">
+            <span class="sc-form-label">Email <span class="req">*</span></span>
+            <input class="input" placeholder="you@company.com" />
+            <span class="sc-form-help">We&rsquo;ll never share your email.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Select -->
+      <div class="sh-cell span-3">
+        <div class="sh-head"><span class="name">Select</span><span class="tag">FORM</span></div>
+        <div class="sh-body col start" style="padding-top: var(--sp-6);">
+          <div style="width: 100%;">
+            <div class="sc-select open">
+              <span class="val">Erbil — KRG</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+            <div class="sc-select-menu">
+              <div class="sc-label-row">Iraq</div>
+              <div class="sc-item" data-active>Erbil — KRG<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:auto;"><path d="M20 6L9 17l-5-5"/></svg></div>
+              <div class="sc-item">Baghdad</div>
+              <div class="sc-item">Sulaymaniyah</div>
+              <div class="sc-sep"></div>
+              <div class="sc-label-row">Gulf</div>
+              <div class="sc-item">Dubai — UAE</div>
+              <div class="sc-item">Riyadh — KSA</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Radio group -->
+      <div class="sh-cell span-3">
+        <div class="sh-head"><span class="name">Radio Group</span><span class="tag">FORM</span></div>
+        <div class="sh-body col start" style="padding-top: var(--sp-6); gap: var(--sp-3);">
+          <div style="display: grid; gap: var(--sp-3); width: 100%;">
+            <label class="sc-radio checked"><span class="dot"></span>Hourly engagement</label>
+            <label class="sc-radio"><span class="dot"></span>Fixed scope</label>
+            <label class="sc-radio"><span class="dot"></span>Retainer (90&thinsp;days)</label>
+            <label class="sc-radio"><span class="dot"></span>Equity partnership</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Switch -->
+      <div class="sh-cell span-3">
+        <div class="sh-head"><span class="name">Switch</span><span class="tag">FORM</span></div>
+        <div class="sh-body col start" style="padding-top: var(--sp-6);">
+          <div style="display: grid; gap: var(--sp-3); width: 100%;">
+            <div style="display: flex; justify-content: space-between; align-items: center;"><span style="font-size: var(--t-sm);">Realtime sync</span><span class="sc-switch on"><span class="knob"></span></span></div>
+            <div style="display: flex; justify-content: space-between; align-items: center;"><span style="font-size: var(--t-sm);">Push notifications</span><span class="sc-switch"><span class="knob"></span></span></div>
+            <div style="display: flex; justify-content: space-between; align-items: center;"><span style="font-size: var(--t-sm); color: var(--fg-muted);">Telemetry (disabled)</span><span class="sc-switch" style="opacity: 0.4;"><span class="knob"></span></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slider -->
+      <div class="sh-cell span-4">
+        <div class="sh-head"><span class="name">Slider</span><span class="tag">FORM</span></div>
+        <div class="sh-body col start" style="padding-top: var(--sp-6); gap: var(--sp-5);">
+          <div style="width: 100%;">
+            <div style="display: flex; justify-content: space-between; font-size: var(--t-xs); color: var(--fg-secondary); margin-bottom: 8px;"><span>Engagement budget</span><span style="font-family: var(--font-mono); color: var(--accent);">$48k</span></div>
+            <div class="sc-slider"><div class="track"><div class="fill" style="left: 0; width: 48%;"></div><span class="thumb" style="left: 48%;"></span></div>
+              <div class="ticks"><span>$0</span><span>$50k</span><span>$100k</span></div>
+            </div>
+          </div>
+          <div style="width: 100%;">
+            <div style="display: flex; justify-content: space-between; font-size: var(--t-xs); color: var(--fg-secondary); margin-bottom: 8px;"><span>Team size</span><span style="font-family: var(--font-mono); color: var(--accent);">6&ndash;12</span></div>
+            <div class="sc-slider"><div class="track"><div class="fill" style="left: 30%; width: 35%;"></div><span class="thumb" style="left: 30%;"></span><span class="thumb" style="left: 65%;"></span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input OTP -->
+      <div class="sh-cell span-4">
+        <div class="sh-head"><span class="name">Input OTP</span><span class="tag">FORM</span></div>
+        <div class="sh-body col" style="padding-top: var(--sp-6);">
+          <div class="sc-otp">
+            <div class="slot">4</div>
+            <div class="slot">7</div>
+            <div class="slot">9</div>
+            <div class="sep">&ndash;</div>
+            <div class="slot">2</div>
+            <div class="slot active">3</div>
+            <div class="slot"></div>
+          </div>
+          <span class="sc-form-help" style="text-align: center;">Six-digit code from your authenticator.</span>
+        </div>
+      </div>
+
+      <!-- Combobox -->
+      <div class="sh-cell span-4">
+        <div class="sh-head"><span class="name">Combobox</span><span class="tag">FORM</span></div>
+        <div class="sh-body col start" style="padding-top: var(--sp-6);">
+          <div style="width: 100%;">
+            <div class="sc-select open">
+              <span style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                <span class="sc-combo-tag">TypeScript<span class="x">×</span></span>
+                <span class="sc-combo-tag">Postgres<span class="x">×</span></span>
+                <span class="val placeholder">Search stack…</span>
+              </span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+            <div class="sc-select-menu sc-combobox-menu">
+              <div class="sc-item">React 19</div>
+              <div class="sc-item">Next.js 15</div>
+              <div class="sc-item">Drizzle ORM</div>
+              <div class="sc-item">Redis</div>
+              <div class="sc-item">Kubernetes</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- Disclosure cluster ---------- -->
+    <h3 style="font-family: var(--font-display); font-size: var(--t-xl); margin: 0 0 var(--sp-5); letter-spacing: var(--ls-snug);">Disclosure</h3>
+    <div class="sh-grid" style="margin-bottom: var(--sp-10);">
+
+      <!-- Accordion -->
+      <div class="sh-cell span-6">
+        <div class="sh-head"><span class="name">Accordion</span><span class="tag">DISCLOSURE</span></div>
+        <div class="sh-body start" style="padding: var(--sp-5);">
+          <div class="sc-accordion">
+            <div class="item" data-open>
+              <div class="trigger">What does an engagement look like?<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+              <div class="panel">Two-week discovery, four-to-twelve week build, then a 30-day stabilization window. We instrument the metric before we write the first line.</div>
+            </div>
+            <div class="item">
+              <div class="trigger">Do you work in Arabic and Kurdish?<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+              <div class="panel">Yes. Every Keyu surface is bilingual-first.</div>
+            </div>
+            <div class="item">
+              <div class="trigger">What stacks do you ship?<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+              <div class="panel">TypeScript end-to-end, Postgres, Python for ML.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Collapsible -->
+      <div class="sh-cell span-6">
+        <div class="sh-head"><span class="name">Collapsible</span><span class="tag">DISCLOSURE</span></div>
+        <div class="sh-body start col" style="padding: var(--sp-5); gap: var(--sp-3);">
+          <div class="sc-collapsible">
+            <div class="trigger">@keyu/atlas-ml has 3 open PRs<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+            <div class="panel">
+              <div class="row">feat: streaming inference for embeddings · +402 / &minus;88</div>
+              <div class="row">fix: race in batch scheduler · +14 / &minus;9</div>
+              <div class="row">chore: pin torch to 2.6 · +1 / &minus;1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- Overlays cluster ---------- -->
+    <h3 style="font-family: var(--font-display); font-size: var(--t-xl); margin: 0 0 var(--sp-5); letter-spacing: var(--ls-snug);">Overlays</h3>
+    <div class="sh-grid" style="margin-bottom: var(--sp-10);">
+
+      <!-- Dialog -->
+      <div class="sh-cell span-4">
+        <div class="sh-head"><span class="name">Dialog</span><span class="tag">OVERLAY</span></div>
+        <div class="sh-body" style="background: rgba(5,5,5,0.55);">
+          <div class="sc-dialog">
+            <h5>Start a project</h5>
+            <p>Tell us the metric you&rsquo;d like to move. We&rsquo;ll reply within a day with two engagement shapes.</p>
+            <div class="field-row" style="gap: 6px;">
+              <span class="sc-form-label">Email</span>
+              <input class="input" placeholder="you@company.com" />
+            </div>
+            <div class="row">
+              <button class="btn btn-ghost btn-sm">Cancel</button>
+              <button class="btn btn-primary btn-sm">Send brief</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alert Dialog -->
+      <div class="sh-cell span-4">
+        <div class="sh-head"><span class="name">Alert Dialog</span><span class="tag">OVERLAY</span></div>
+        <div class="sh-body" style="background: rgba(5,5,5,0.55);">
+          <div class="sc-dialog">
+            <h5 style="color: var(--error);">Delete project &ldquo;Atlas ML&rdquo;?</h5>
+            <p>This will permanently delete 14 deployments, 6 datasets and revoke 23 API tokens. This action cannot be undone.</p>
+            <div class="row">
+              <button class="btn btn-ghost btn-sm">Cancel</button>
+              <button class="btn btn-danger btn-sm">Delete project</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Popover -->
+      <div class="sh-cell span-4">
+        <div class="sh-head"><span class="name">Popover</span><span class="tag">OVERLAY</span></div>
+        <div class="sh-body col" style="gap: var(--sp-5);">
+          <button class="btn btn-secondary btn-sm">Filter ▾</button>
+          <div class="sc-popover">
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--fg-muted);">Filter by status</div>
+            <label class="check checked" style="font-size: 13px;"><span class="box"><svg width="10" height="10"><use href="assets/icons.svg#check"/></svg></span> Live</label>
+            <label class="check" style="font-size: 13px;"><span class="box"></span> Beta</label>
+            <label class="check" style="font-size: 13px;"><span class="box"></span> Draft</label>
+            <button class="btn btn-primary btn-sm" style="margin-top: 4px;">Apply</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tooltip -->
+      <div class="sh-cell span-3">
+        <div class="sh-head"><span class="name">Tooltip</span><span class="tag">OVERLAY</span></div>
+        <div class="sh-body col" style="gap: var(--sp-8);">
+          <div class="sc-tooltip">Last sync 4&thinsp;min ago</div>
+          <button class="btn btn-secondary btn-sm">Hover me</button>
+        </div>
+      </div>
+
+      <!-- Hover Card -->
+      <div class="sh-cell span-4">
+        <div class="sh-head"><span class="name">Hover Card</span><span class="tag">OVERLAY</span></div>
+        <div class="sh-body">
+          <div class="sc-hover-card">
+            <div class="row">
+              <span class="avatar" style="width: 40px; height: 40px;">K</span>
+              <div>
+                <div style="font-size: var(--t-sm); font-weight: 600;">@keyu/core</div>
+                <div class="meta">14 members · Erbil &middot; Dubai</div>
+              </div>
+            </div>
+            <p style="margin: 0; font-size: var(--t-xs); color: var(--fg-secondary); line-height: 1.55;">Custom IT solutions: web, AI, SaaS, data. Founded 2021. Currently shipping for clients in seven countries.</p>
+            <div style="display: flex; gap: 8px;">
+              <span class="badge badge-ok"><span class="dot"></span>Hiring</span>
+              <span class="badge badge-gold">Featured</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dropdown Menu -->
+      <div class="sh-cell span-5">
+        <div class="sh-head"><span class="name">Dropdown Menu</span><span class="tag">OVERLAY</span></div>
+        <div class="sh-body col" style="gap: var(--sp-4);">
+          <button class="btn btn-secondary btn-sm">Account ▾</button>
+          <div class="sc-menu">
+            <div class="sc-label-row">Account</div>
+            <div class="sc-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>Profile<span class="key">⇧⌘P</span></div>
+            <div class="sc-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12l2 1.5-2 1.5-1 2-2.5-.5-2 1.5L12 21l-1.5-2-2.5-.5L7 17l-2-1-1-2.5 2-1.5-2-1.5L5 8l1-2 2.5.5L10 5l2 1 2-1 1.5 2L18 7l-1 2.5z"/></svg>Settings<span class="key">⌘,</span></div>
+            <div class="sc-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17l-5-5 5-5M4 12h14"/></svg>Switch workspace</div>
+            <div class="sc-sep"></div>
+            <div class="sc-label-row">Team</div>
+            <div class="sc-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-8 0v2"/><circle cx="12" cy="7" r="4"/></svg>Invite members<span class="key">⌘I</span></div>
+            <div class="sc-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Billing</div>
+            <div class="sc-sep"></div>
+            <div class="sc-item" style="color: var(--error);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--error);"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Sign out</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Context Menu -->
+      <div class="sh-cell span-4">
+        <div class="sh-head"><span class="name">Context Menu</span><span class="tag">OVERLAY</span></div>
+        <div class="sh-body">
+          <div class="sc-menu" style="width: 260px;">
+            <div class="sc-item">Back<span class="key">⌘[</span></div>
+            <div class="sc-item">Forward<span class="key">⌘]</span></div>
+            <div class="sc-item" data-active>Reload<span class="key">⌘R</span></div>
+            <div class="sc-sep"></div>
+            <div class="sc-label-row">View</div>
+            <div class="sc-item">Save as…<span class="key">⌘S</span></div>
+            <div class="sc-item">Print…<span class="key">⌘P</span></div>
+            <div class="sc-sep"></div>
+            <div class="sc-item">Inspect element<span class="key">⌥⌘I</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Menubar -->
+      <div class="sh-cell span-8">
+        <div class="sh-head"><span class="name">Menubar</span><span class="tag">OVERLAY</span></div>
+        <div class="sh-body col" style="gap: var(--sp-4); align-items: flex-start;">
+          <div class="sc-menubar">
+            <div class="it">File</div>
+            <div class="it" data-active>Edit</div>
+            <div class="it">View</div>
+            <div class="it">Window</div>
+            <div class="it">Help</div>
+          </div>
+          <div class="sc-menu" style="width: 240px; margin-left: 56px;">
+            <div class="sc-item">Undo<span class="key">⌘Z</span></div>
+            <div class="sc-item">Redo<span class="key">⇧⌘Z</span></div>
+            <div class="sc-sep"></div>
+            <div class="sc-item" data-active>Cut<span class="key">⌘X</span></div>
+            <div class="sc-item">Copy<span class="key">⌘C</span></div>
+            <div class="sc-item">Paste<span class="key">⌘V</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Command -->
+      <div class="sh-cell span-6">
+        <div class="sh-head"><span class="name">Command</span><span class="tag">OVERLAY</span></div>
+        <div class="sh-body">
+          <div class="sc-command">
+            <div class="search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+              <input value="ship" />
+              <span class="kbd">⌘K</span>
+            </div>
+            <div class="body">
+              <div class="sc-label-row">Suggestions</div>
+              <div class="sc-item" data-active><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5L20 7"/></svg>Ship release v1.4.2<span class="key">↵</span></div>
+              <div class="sc-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>Schedule shipment for tomorrow</div>
+              <div class="sc-sep"></div>
+              <div class="sc-label-row">Pages</div>
+              <div class="sc-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Open Shipments dashboard</div>
+              <div class="sc-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5"/></svg>Customer shipping prefs</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sheet -->
+      <div class="sh-cell span-3">
+        <div class="sh-head"><span class="name">Sheet</span><span class="tag">OVERLAY</span></div>
+        <div class="sh-body" style="background: rgba(5,5,5,0.45); padding: 0; align-items: stretch; justify-content: flex-end;">
+          <div class="sc-sheet" style="max-width: 240px;">
+            <div class="head"><h6>Notifications</h6><p>3 new this week</p></div>
+            <div class="body">
+              <div style="display: grid; gap: 4px;"><div style="font-size: 13px;">Atlas ML deploy succeeded</div><div style="font-size: 11px; color: var(--fg-muted); font-family: var(--font-mono);">2&thinsp;min ago</div></div>
+              <div style="display: grid; gap: 4px;"><div style="font-size: 13px;">3 PRs ready for review</div><div style="font-size: 11px; color: var(--fg-muted); font-family: var(--font-mono);">18&thinsp;min ago</div></div>
+              <div style="display: grid; gap: 4px;"><div style="font-size: 13px;">Invoice INV-0429 paid</div><div style="font-size: 11px; color: var(--fg-muted); font-family: var(--font-mono);">2&thinsp;hr ago</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Drawer -->
+      <div class="sh-cell span-3">
+        <div class="sh-head"><span class="name">Drawer</span><span class="tag">OVERLAY</span></div>
+        <div class="sh-body" style="background: rgba(5,5,5,0.45); padding: 0; align-items: flex-end; justify-content: center;">
+          <div class="sc-drawer" style="max-width: 100%; width: 100%;">
+            <div class="handle"></div>
+            <div class="head"><h6>Quick action</h6><p>Mobile-first bottom sheet</p></div>
+            <div class="body">
+              <button class="btn btn-primary" style="width: 100%;">Confirm shipment</button>
+              <button class="btn btn-ghost btn-sm">Edit details</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- Feedback cluster ---------- -->
+    <h3 style="font-family: var(--font-display); font-size: var(--t-xl); margin: 0 0 var(--sp-5); letter-spacing: var(--ls-snug);">Feedback</h3>
+    <div class="sh-grid" style="margin-bottom: var(--sp-10);">
+
+      <!-- Alert -->
+      <div class="sh-cell span-6">
+        <div class="sh-head"><span class="name">Alert</span><span class="tag">FEEDBACK</span></div>
+        <div class="sh-body col" style="padding: var(--sp-5); gap: var(--sp-3);">
+          <div class="sc-alert info">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg></span>
+            <div><h6>Heads up</h6><p>Your trial ends in 5 days. Upgrade to keep access to your data.</p></div>
+          </div>
+          <div class="sc-alert gold">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.5 7.5L23 11l-5.5 5L19 23l-7-4-7 4 1.5-7L1 11l7.5-1.5z"/></svg></span>
+            <div><h6>New release — Atlas v1.4</h6><p>Streaming inference, faster batching, and a redesigned eval dashboard.</p></div>
+          </div>
+          <div class="sc-alert error">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.86L1.82 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.86a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></span>
+            <div><h6>Connection lost</h6><p>We couldn&rsquo;t reach the analytics gateway. Retrying in 12s.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="sh-cell span-3">
+        <div class="sh-head"><span class="name">Progress</span><span class="tag">FEEDBACK</span></div>
+        <div class="sh-body col start" style="padding-top: var(--sp-6); gap: var(--sp-5);">
+          <div style="width: 100%;">
+            <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10px; color: var(--fg-muted); margin-bottom: 6px; letter-spacing: var(--ls-wide);"><span>UPLOAD</span><span>72%</span></div>
+            <div class="sc-progress"><i style="width: 72%;"></i></div>
+          </div>
+          <div style="width: 100%;">
+            <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10px; color: var(--accent); margin-bottom: 6px; letter-spacing: var(--ls-wide);"><span>DEPLOY</span><span>32%</span></div>
+            <div class="sc-progress gold"><i style="width: 32%;"></i></div>
+          </div>
+          <div style="width: 100%;">
+            <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10px; color: var(--fg-muted); margin-bottom: 6px; letter-spacing: var(--ls-wide);"><span>EVAL</span><span>100%</span></div>
+            <div class="sc-progress"><i style="width: 100%;"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Skeleton -->
+      <div class="sh-cell span-3">
+        <div class="sh-head"><span class="name">Skeleton</span><span class="tag">FEEDBACK</span></div>
+        <div class="sh-body col start" style="padding-top: var(--sp-6); gap: 10px;">
+          <div style="display: flex; gap: 12px; align-items: center; width: 100%;">
+            <div class="sc-skel" style="width: 40px; height: 40px; border-radius: 50%;"></div>
+            <div style="flex: 1; display: grid; gap: 6px;">
+              <div class="sc-skel" style="height: 10px; width: 70%;"></div>
+              <div class="sc-skel" style="height: 8px; width: 40%;"></div>
+            </div>
+          </div>
+          <div class="sc-skel" style="height: 8px; width: 100%;"></div>
+          <div class="sc-skel" style="height: 8px; width: 90%;"></div>
+          <div class="sc-skel" style="height: 8px; width: 60%;"></div>
+        </div>
+      </div>
+
+      <!-- Toast / Sonner -->
+      <div class="sh-cell span-6">
+        <div class="sh-head"><span class="name">Toast · Sonner</span><span class="tag">FEEDBACK</span></div>
+        <div class="sh-body col" style="padding: var(--sp-5); gap: var(--sp-3); align-items: flex-end;">
+          <div class="sc-toast ok">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5L20 7"/></svg></span>
+            <div><h6>Deploy successful</h6><p>atlas-ml/v1.4.2 · Production</p></div>
+            <span class="x">×</span>
+          </div>
+          <div class="sc-toast gold">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></span>
+            <div><h6>Scheduled for review</h6><p>Will run at 09:00 Erbil time</p></div>
+            <span class="x">×</span>
+          </div>
+          <div class="sc-toast err">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg></span>
+            <div><h6>Build failed</h6><p>Step 14/22 — see logs for details</p></div>
+            <span class="x">×</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress (circular) replaced by Chart preview -->
+      <div class="sh-cell span-6">
+        <div class="sh-head"><span class="name">Chart</span><span class="tag">DATA</span></div>
+        <div class="sh-body col start" style="padding: var(--sp-5);">
+          <div class="sc-chart">
+            <div class="legend"><span><i style="background: var(--accent);"></i>DEPLOYS</span><span><i style="background: var(--info);"></i>INCIDENTS</span></div>
+            <svg viewBox="0 0 360 110" style="width: 100%; height: 110px; display: block;">
+              <defs>
+                <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0" stop-color="#E8B833" stop-opacity="0.35"/>
+                  <stop offset="1" stop-color="#E8B833" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <g stroke="rgba(232,230,221,0.06)">
+                <line x1="0" x2="360" y1="20" y2="20"/>
+                <line x1="0" x2="360" y1="55" y2="55"/>
+                <line x1="0" x2="360" y1="90" y2="90"/>
+              </g>
+              <path d="M0 80 L30 70 L60 78 L90 50 L120 60 L150 30 L180 42 L210 22 L240 36 L270 12 L300 28 L330 18 L360 28 L360 110 L0 110 Z" fill="url(#g1)"/>
+              <path d="M0 80 L30 70 L60 78 L90 50 L120 60 L150 30 L180 42 L210 22 L240 36 L270 12 L300 28 L330 18 L360 28" fill="none" stroke="#E8B833" stroke-width="1.5"/>
+              <path d="M0 95 L30 88 L60 92 L90 84 L120 90 L150 78 L180 86 L210 80 L240 84 L270 72 L300 82 L330 76 L360 82" fill="none" stroke="#4A6E8A" stroke-width="1.5" stroke-dasharray="3 3"/>
+            </svg>
+            <div style="margin-top: var(--sp-3); display: flex; gap: 4px; align-items: end; height: 56px;">
+              <div style="width: 7%; background: var(--accent); height: 50%;"></div>
+              <div style="width: 7%; background: var(--accent); height: 30%;"></div>
+              <div style="width: 7%; background: var(--accent); height: 70%;"></div>
+              <div style="width: 7%; background: var(--accent); height: 40%;"></div>
+              <div style="width: 7%; background: var(--accent); height: 90%;"></div>
+              <div style="width: 7%; background: var(--accent); height: 55%;"></div>
+              <div style="width: 7%; background: var(--accent); height: 35%;"></div>
+              <div style="width: 7%; background: var(--accent); height: 75%; opacity: 0.55;"></div>
+              <div style="width: 7%; background: var(--ink-700); height: 28%;"></div>
+              <div style="width: 7%; background: var(--ink-700); height: 50%;"></div>
+              <div style="width: 7%; background: var(--ink-700); height: 22%;"></div>
+              <div style="width: 7%; background: var(--ink-700); height: 38%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- Navigation cluster ---------- -->
+    <h3 style="font-family: var(--font-display); font-size: var(--t-xl); margin: 0 0 var(--sp-5); letter-spacing: var(--ls-snug);">Navigation</h3>
+    <div class="sh-grid" style="margin-bottom: var(--sp-10);">
+
+      <!-- Breadcrumb -->
+      <div class="sh-cell span-6">
+        <div class="sh-head"><span class="name">Breadcrumb</span><span class="tag">NAV</span></div>
+        <div class="sh-body start col" style="padding-top: var(--sp-5); gap: var(--sp-4); align-items: flex-start;">
+          <div class="sc-breadcrumb">
+            <a>Keyu</a>
+            <span class="sep">/</span>
+            <a>Engagements</a>
+            <span class="sep">/</span>
+            <a>Atlas ML</a>
+            <span class="sep">/</span>
+            <span class="current">Inference</span>
+          </div>
+          <div class="sc-breadcrumb">
+            <a>Docs</a>
+            <span class="sep">/</span>
+            <span class="more">…</span>
+            <span class="sep">/</span>
+            <a>Auth</a>
+            <span class="sep">/</span>
+            <span class="current">OAuth 2.1</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="sh-cell span-6">
+        <div class="sh-head"><span class="name">Pagination</span><span class="tag">NAV</span></div>
+        <div class="sh-body">
+          <div class="sc-pagination">
+            <a>&lsaquo;</a>
+            <a>1</a>
+            <span class="cur">2</span>
+            <a>3</a>
+            <a>4</a>
+            <span class="ell">…</span>
+            <a>27</a>
+            <a>&rsaquo;</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <div class="sh-cell span-12">
+        <div class="sh-head"><span class="name">Navigation Menu</span><span class="tag">NAV</span></div>
+        <div class="sh-body start col" style="padding: var(--sp-5); gap: 0; align-items: stretch;">
+          <div class="sc-nav">
+            <span class="trig" data-open>Services <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+            <span class="trig">Work</span>
+            <span class="trig">About <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+            <span class="trig">Resources</span>
+          </div>
+          <div class="sc-nav-mega">
+            <div class="feature">
+              <span class="eb">FEATURED</span>
+              <h6>Atlas ML — Inference platform</h6>
+              <p>Stream-first model serving for production. Multi-tenant, observable, ships with a redesigned eval dashboard.</p>
+              <a class="btn btn-soft btn-sm" style="margin-top: 8px; align-self: flex-start;">Read case study →</a>
+            </div>
+            <div class="col">
+              <h6>By practice</h6>
+              <a>Web development<small>Marketing sites, portals, dashboards</small></a>
+              <a>AI &amp; ML<small>Pipelines, evals, inference</small></a>
+              <a>SaaS<small>Multi-tenant product builds</small></a>
+              <a>Data analysis<small>Warehouses, dbt, reporting</small></a>
+            </div>
+            <div class="col">
+              <h6>By industry</h6>
+              <a>Telecom<small>Korek, Asiacell, MTN</small></a>
+              <a>Banking<small>Saderat, Mansour, Cihan</small></a>
+              <a>Logistics<small>Aramex, DHL partners</small></a>
+              <a>Public sector<small>KRG, Erbil municipality</small></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- Data & layout cluster ---------- -->
+    <h3 style="font-family: var(--font-display); font-size: var(--t-xl); margin: 0 0 var(--sp-5); letter-spacing: var(--ls-snug);">Data &amp; layout</h3>
+    <div class="sh-grid" style="margin-bottom: var(--sp-10);">
+
+      <!-- Calendar / Date Picker -->
+      <div class="sh-cell span-4">
+        <div class="sh-head"><span class="name">Calendar · Date Picker</span><span class="tag">DATA</span></div>
+        <div class="sh-body">
+          <div class="sc-calendar">
+            <div class="cal-head">
+              <button>&lsaquo;</button>
+              <span>April 2026</span>
+              <button>&rsaquo;</button>
+            </div>
+            <div class="cal-dow"><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span></div>
+            <div class="cal-grid">
+              <div class="d muted">30</div><div class="d muted">31</div><div class="d">1</div><div class="d">2</div><div class="d">3</div><div class="d">4</div><div class="d">5</div>
+              <div class="d">6</div><div class="d">7</div><div class="d">8</div><div class="d today">9</div><div class="d">10</div><div class="d">11</div><div class="d">12</div>
+              <div class="d">13</div><div class="d range-s">14</div><div class="d range">15</div><div class="d range">16</div><div class="d range">17</div><div class="d range-e">18</div><div class="d">19</div>
+              <div class="d">20</div><div class="d">21</div><div class="d">22</div><div class="d">23</div><div class="d">24</div><div class="d">25</div><div class="d">26</div>
+              <div class="d">27</div><div class="d">28</div><div class="d">29</div><div class="d">30</div><div class="d muted">1</div><div class="d muted">2</div><div class="d muted">3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carousel -->
+      <div class="sh-cell span-8">
+        <div class="sh-head"><span class="name">Carousel</span><span class="tag">DATA</span></div>
+        <div class="sh-body" style="padding: var(--sp-5);">
+          <div class="sc-carousel">
+            <span class="nav">&lsaquo;</span>
+            <div class="track">
+              <div class="slide sel">01 / Atlas ML</div>
+              <div class="slide">02 / Nahla SaaS</div>
+              <div class="slide">03 / Vault Insight</div>
+            </div>
+            <span class="nav">&rsaquo;</span>
+          </div>
+          <div style="display: flex; gap: 4px; justify-content: center; margin-top: var(--sp-3);">
+            <span style="width: 16px; height: 3px; background: var(--accent); border-radius: var(--r-pill);"></span>
+            <span style="width: 16px; height: 3px; background: var(--ink-700); border-radius: var(--r-pill);"></span>
+            <span style="width: 16px; height: 3px; background: var(--ink-700); border-radius: var(--r-pill);"></span>
+            <span style="width: 16px; height: 3px; background: var(--ink-700); border-radius: var(--r-pill);"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resizable -->
+      <div class="sh-cell span-4">
+        <div class="sh-head"><span class="name">Resizable</span><span class="tag">LAYOUT</span></div>
+        <div class="sh-body">
+          <div class="sc-resizable">
+            <div class="pane">PANEL A · 60%</div>
+            <div class="handle"></div>
+            <div class="pane">PANEL B · 40%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll Area -->
+      <div class="sh-cell span-4">
+        <div class="sh-head"><span class="name">Scroll Area</span><span class="tag">LAYOUT</span></div>
+        <div class="sh-body">
+          <div class="sc-scroll">
+            <div class="inner">
+              <span>01 — TypeScript</span>
+              <span>02 — React 19</span>
+              <span>03 — Next.js 15</span>
+              <span>04 — Drizzle ORM</span>
+              <span>05 — Postgres 16</span>
+              <span>06 — Redis</span>
+              <span>07 — pgvector</span>
+              <span>08 — Kubernetes</span>
+              <span>09 — Cloudflare R2</span>
+              <span>10 — Pulumi</span>
+            </div>
+            <span class="bar"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aspect Ratio -->
+      <div class="sh-cell span-4">
+        <div class="sh-head"><span class="name">Aspect Ratio</span><span class="tag">LAYOUT</span></div>
+        <div class="sh-body">
+          <div class="sc-aspect">16 : 9 · placeholder</div>
+        </div>
+      </div>
+
+      <!-- Separator -->
+      <div class="sh-cell span-6">
+        <div class="sh-head"><span class="name">Separator</span><span class="tag">LAYOUT</span></div>
+        <div class="sh-body col" style="padding: var(--sp-5); gap: var(--sp-3); align-items: stretch;">
+          <div>
+            <div style="font-family: var(--font-display); font-weight: 600; font-size: var(--t-md);">Keyu.tech</div>
+            <div style="font-size: var(--t-xs); color: var(--fg-secondary);">Custom IT solutions · Erbil &middot; Dubai</div>
+          </div>
+          <span class="sc-separator h"></span>
+          <div style="display: flex; gap: var(--sp-5); font-size: var(--t-xs); color: var(--fg-secondary); align-items: center;">
+            <span>Web</span>
+            <span class="sc-separator v" style="height: 14px;"></span>
+            <span>AI &amp; ML</span>
+            <span class="sc-separator v" style="height: 14px;"></span>
+            <span>SaaS</span>
+            <span class="sc-separator v" style="height: 14px;"></span>
+            <span>Data</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toggle / Toggle Group -->
+      <div class="sh-cell span-6">
+        <div class="sh-head"><span class="name">Toggle · Toggle Group</span><span class="tag">CONTROL</span></div>
+        <div class="sh-body col" style="padding: var(--sp-5); gap: var(--sp-4); align-items: flex-start;">
+          <div style="display: flex; gap: 6px;">
+            <button class="sc-toggle on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4h10v3M7 20h10v-3M12 4v16"/></svg></button>
+            <button class="sc-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M5 6h14M5 18h14"/></svg></button>
+            <button class="sc-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg></button>
+          </div>
+          <div class="sc-toggle-group">
+            <button class="sc-toggle on">Day</button>
+            <button class="sc-toggle">Week</button>
+            <button class="sc-toggle">Month</button>
+            <button class="sc-toggle">Quarter</button>
+            <button class="sc-toggle">Year</button>
+          </div>
+          <div class="sc-toggle-group">
+            <button class="sc-toggle on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+            <button class="sc-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+            <button class="sc-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="6"/><rect x="3" y="11" width="18" height="3"/><rect x="3" y="16" width="18" height="5"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- Inventory ---------- -->
+    <div class="frame">
+      <div class="frame-head"><span>Inventory</span><span>54 primitives · circuit theme</span></div>
+      <div class="frame-body tight">
+        <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 1px; background: var(--line);">
+          <!-- 54 chips -->
+          <!-- Forms -->
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Button</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Input</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Textarea</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Label</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Select</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Combobox</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Checkbox</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Radio Group</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Switch</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Slider</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Input OTP</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Form</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Toggle</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Toggle Group</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Date Picker</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Calendar</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Accordion</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Collapsible</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Dialog</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Alert Dialog</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Sheet</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Drawer</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Popover</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Tooltip</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Hover Card</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Dropdown Menu</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Context Menu</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Menubar</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Navigation Menu</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Command</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Tabs</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Breadcrumb</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Pagination</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Alert</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Toast</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Sonner</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Progress</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Skeleton</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Badge</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Avatar</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Card</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Table</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Data Table</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Chart</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Carousel</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Aspect Ratio</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Scroll Area</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Resizable</span><span style="color: var(--accent);">✓</span></div>
+          <div style="background: var(--bg-card); padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--fg-primary); display: flex; justify-content: space-between;"><span>Separator</span><span style="color: var(--accent);">✓</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 07 IMAGERY ============ -->
+  <section id="imagery">
+    <header class="sec-head">
+      <div class="sec-eyebrow">08 — Imagery &amp; illustration</div>
+      <h2 class="sec-title">Material, not metaphor.</h2>
+      <p class="sec-lede">Photography is low-key and architectural: brass surfaces, raw concrete, machined metal, and warm-tungsten interiors. Illustrations are technical diagrams — schematics, network graphs, isometric line drawings — never decorative spot art.</p>
+    </header>
+
+    <div class="imagery-grid">
+      <div class="img-tile tall photo-arch"><span class="cap">01 / brass &amp; tungsten</span></div>
+      <div class="img-tile photo-grain"><span class="cap">02 / warm light</span></div>
+      <div class="img-tile photo-grid"><span class="cap">03 / technical grid</span></div>
+      <div class="img-tile photo-grain"><span class="cap">04 / negative space</span></div>
+      <div class="img-tile photo-grid"><span class="cap">05 / system diagram</span></div>
+    </div>
+
+    <div class="voice imagery-do">
+      <div class="col yes">
+        <h4>Yes</h4>
+        <ul>
+          <li>Architectural photography with strong directional light</li>
+          <li>Materials: brass, concrete, raw metal, oxidized copper</li>
+          <li>Technical diagrams, system schematics, line drawings</li>
+          <li>People in environment — engaged with work, not the camera</li>
+        </ul>
+      </div>
+      <div class="col no">
+        <h4>No</h4>
+        <ul>
+          <li>Stock photos of suits shaking hands</li>
+          <li>Generative AI art with obvious 3D-render lighting</li>
+          <li>Cliché tech illustrations (glowing circuit boards, AI brains)</li>
+          <li>Heavy color filters or saturated marketing-grade photography</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 08 MOTION ============ -->
+  <section id="motion">
+    <header class="sec-head">
+      <div class="sec-eyebrow">09 — Motion</div>
+      <h2 class="sec-title">Crisp, considered,<br>almost imperceptible.</h2>
+      <p class="sec-lede">Motion in Keyu surfaces signals engineered precision. Three timing curves do almost all the work — paired with four durations from 120ms (button feedback) to 520ms (page transitions). The default is restraint; flourish is the exception.</p>
+    </header>
+
+    <div class="motion-grid" style="margin-bottom: var(--sp-6);">
+      <div class="motion-card" data-m="snap">
+        <div class="n">01 / Snap</div>
+        <h5>ease-out · 120–200ms</h5>
+        <p>Button presses, hover changes, focus rings. Confident, immediate, then settled.</p>
+        <div class="demo"><div class="ball"></div></div>
+      </div>
+      <div class="motion-card" data-m="ease">
+        <div class="n">02 / Ease</div>
+        <h5>ease-in-out · 320ms</h5>
+        <p>Modal opens, drawer slides, content reveals. The medium-weight default.</p>
+        <div class="demo"><div class="ball"></div></div>
+      </div>
+      <div class="motion-card" data-m="hold">
+        <div class="n">03 / Hold</div>
+        <h5>ease-out · 520ms</h5>
+        <p>Page transitions, hero entries. Used sparingly — only on first impression and rare big moments.</p>
+        <div class="demo"><div class="ball"></div></div>
+      </div>
+    </div>
+
+    <div class="frame">
+      <div class="frame-head"><span>Timing tokens</span><span>4 durations · 3 curves</span></div>
+      <div class="frame-body tight">
+        <table class="data-table timing-table">
+          <thead><tr><th>Token</th><th>Value</th><th>Curve</th><th>Use</th></tr></thead>
+          <tbody>
+            <tr><td>--dur-1</td><td class="num">120ms</td><td class="num">ease-out</td><td>Hover, focus, button press</td></tr>
+            <tr><td>--dur-2</td><td class="num">200ms</td><td class="num">ease-out</td><td>Tabs, tooltip, dropdown</td></tr>
+            <tr><td>--dur-3</td><td class="num">320ms</td><td class="num">ease-in-out</td><td>Modal, drawer, content reveal</td></tr>
+            <tr><td>--dur-4</td><td class="num">520ms</td><td class="num">ease-out</td><td>Page transition, hero entry</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 09 APPLIED ============ -->
+  <section id="applied">
+    <header class="sec-head">
+      <div class="sec-eyebrow">10 — Applied</div>
+      <h2 class="sec-title">The system,<br>in production.</h2>
+      <p class="sec-lede">A keyu.tech-style marketing site, built on this exact token sheet. Switch between English, Arabic and Kurdish to see the system in action across all three scripts.</p>
+    </header>
+
+    <div class="example-cta">
+      <div>
+        <h3>Keyu Landing → live preview</h3>
+        <p>A complete marketing site assembled from the tokens, type and components on this page. Open it in a new tab to see the Circuit direction in production, with EN/AR/KU language switching.</p>e switcher to flip between EN / AR / KU.</p>
+      </div>
+      <div class="links">
+        <a class="btn btn-primary btn-lg" href="Keyu Landing.html">Open landing &nbsp;<svg><use href="assets/icons.svg#arrow-up-right"/></svg></a>
+        <a class="btn btn-secondary" href="tokens.css">Token CSS</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+</div>
+
+<footer class="docfoot">
+  <div class="row">
+    <div class="meta">
+      KEYU.TECH &middot; DESIGN SYSTEM v1.0 &middot; 2026<br>
+      DIRECTION — CIRCUIT &middot; INDUSTRIAL<br>
+      MAINTAINED BY THE KEYU DESIGN TEAM
+    </div>
+    <div class="meta" style="text-align: end;">
+      ENGINEERED IN ERBIL &middot; SHIPPED EVERYWHERE
+    </div>
+  </div>
+  <div class="big-mark">Keyu<em>.</em></div>
+</footer>
+
+<script>
+  // (direction switcher removed — Circuit is now the only direction)
+  (function () {
+    const root = document.documentElement;
+
+    function apply(dir) {
+      root.setAttribute('data-direction', dir);
+      localStorage.setItem('keyu-direction', dir);
+      document.querySelectorAll('.switcher button').forEach(b => {
+        b.setAttribute('aria-selected', String(b.dataset.set === dir));
+      });
+      // refresh semantic-token values
+      const cs = getComputedStyle(root);
+      ['bg-canvas','bg-elevated','bg-sunken','accent','fg-primary','fg-secondary','line','line-gold'].forEach(k => {
+        const el = document.getElementById('v-' + k);
+        if (el) el.textContent = cs.getPropertyValue('--' + k).trim();
+      });
+    }
+
+    document.querySelectorAll('[data-set]').forEach(el => {
+      el.addEventListener('click', e => {
+        e.preventDefault();
+        apply(el.dataset.set);
+      });
+    });
+
+    apply(root.getAttribute('data-direction') || 'vault');
+
+    // smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href');
+        if (id.length > 1) {
+          const el = document.querySelector(id);
+          if (el) { e.preventDefault(); window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' }); }
+        }
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>

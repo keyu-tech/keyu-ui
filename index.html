@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en" data-direction="circuit">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Keyu — Brand artefacts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;500;600;700;800;900&family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&display=swap" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  body { display: flex; min-height: 100vh; align-items: stretch; }
+  .page { display: grid; grid-template-columns: 1.05fr 1fr; width: 100%; min-height: 100vh; }
+  @media (max-width: 900px) { .page { grid-template-columns: 1fr; } }
+
+  /* ---------- Left brand panel ---------- */
+  .panel {
+    position: relative;
+    background: var(--ink-1000);
+    color: var(--fg-on-ink);
+    padding: var(--sp-12);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .panel::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 80% 90%, rgba(201,161,74,0.35), transparent 55%),
+      radial-gradient(ellipse at 20% 10%, rgba(60,40,15,0.5), transparent 50%);
+    pointer-events: none;
+  }
+  .panel::after {
+    content: ""; position: absolute; inset: 0;
+    background:
+      linear-gradient(rgba(201,161,74,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,161,74,0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: linear-gradient(to bottom right, black 0%, transparent 80%);
+    pointer-events: none;
+  }
+  .panel > * { position: relative; z-index: 1; }
+
+  .crest {
+    display: flex; align-items: center; gap: var(--sp-3);
+    margin-bottom: auto;
+  }
+  .crest svg { color: var(--accent); width: 24px; height: 24px; }
+  .crest .name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--t-lg);
+    letter-spacing: var(--ls-tight);
+  }
+  .crest .name .dot { color: var(--accent); }
+  .crest .stamp {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    padding: 4px 8px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-1);
+  }
+
+  .hero-mark {
+    margin: var(--sp-12) 0;
+    display: flex; align-items: center; gap: var(--sp-8);
+  }
+  .hero-mark svg {
+    height: clamp(140px, 22vw, 240px);
+    color: var(--accent);
+    filter: drop-shadow(0 12px 32px rgba(201,161,74,0.35));
+  }
+  .hero-mark .lockup {
+    border-left: 1px solid var(--line);
+    padding-left: var(--sp-8);
+  }
+  .hero-mark .lockup .wordmark {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(64px, 9vw, 120px);
+    line-height: 0.9;
+    letter-spacing: var(--ls-tight);
+    color: var(--fg-on-ink);
+  }
+  .hero-mark .lockup .wordmark .dot { color: var(--accent); }
+  .hero-mark .lockup .desc {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-top: var(--sp-3);
+  }
+
+  .panel .footer {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-6);
+    padding-top: var(--sp-8);
+    border-top: 1px solid var(--line);
+  }
+  .panel .footer .k {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: var(--sp-2);
+  }
+  .panel .footer .v {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--t-md);
+    color: var(--fg-on-ink);
+    letter-spacing: var(--ls-snug);
+  }
+  .panel .footer .v em { color: var(--accent); font-style: normal; }
+
+  /* ---------- Right index panel ---------- */
+  .index {
+    padding: var(--sp-12);
+    display: flex; flex-direction: column;
+    background: var(--bg-canvas);
+  }
+  .index .lead {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex; align-items: center; gap: var(--sp-3);
+    margin-bottom: var(--sp-5);
+  }
+  .index .lead::before {
+    content: ""; width: 24px; height: 1px; background: var(--accent);
+  }
+  .index h1 {
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-size: clamp(40px, 4.5vw, 64px);
+    line-height: 1.05;
+    letter-spacing: var(--display-tracking);
+    margin: 0 0 var(--sp-6);
+  }
+  .index h1 em { font-style: normal; color: var(--accent); }
+  .index .blurb {
+    font-size: var(--t-md);
+    line-height: var(--lh-loose);
+    color: var(--fg-secondary);
+    max-width: 50ch;
+    margin: 0 0 var(--sp-10);
+  }
+
+  .toc { display: grid; gap: 0; border-top: 1px solid var(--line); }
+  .toc a {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: baseline;
+    gap: var(--sp-5);
+    padding: var(--sp-6) 0;
+    border-bottom: 1px solid var(--line);
+    color: var(--fg-primary);
+    transition: padding var(--dur-2) var(--ease-out);
+  }
+  .toc a:hover { padding-left: var(--sp-3); padding-right: var(--sp-3); background: var(--bg-card); }
+  .toc a .n {
+    font-family: var(--font-mono);
+    font-size: var(--t-xs);
+    color: var(--accent);
+    letter-spacing: var(--ls-wide);
+  }
+  .toc a .body {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .toc a .title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--t-xl);
+    letter-spacing: var(--ls-snug);
+  }
+  .toc a .desc {
+    font-size: var(--t-sm);
+    color: var(--fg-secondary);
+    line-height: 1.5;
+  }
+  .toc a .meta {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    text-align: end;
+    white-space: nowrap;
+  }
+  .toc a .arrow {
+    width: 14px; height: 14px;
+    color: var(--fg-muted);
+    transition: transform var(--dur-2), color var(--dur-2);
+  }
+  .toc a:hover .arrow { transform: translate(3px, -3px); color: var(--accent); }
+
+  .index .colophon {
+    margin-top: auto;
+    padding-top: var(--sp-8);
+    border-top: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    display: flex; justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ============ LEFT: brand panel ============ -->
+  <aside class="panel">
+    <div class="crest">
+      <svg viewBox="0 0 85.23 216.2" fill="currentColor"><path d="M84.73,157.11v33.27a25.31,25.31,0,0,1-50.61,1c0-.33,0-.66,0-1V82.09c-.65-.12-1.3-.26-2-.41A41.15,41.15,0,1,1,82.76,40.3c0,.45,0,.89,0,1.34a41,41,0,0,1-8.49,25,16.31,16.31,0,0,1-3.07.3A15.76,15.76,0,0,1,58.5,60.53a25.23,25.23,0,0,0,8.4-17.2c0-.56.06-1.12.06-1.69A25.32,25.32,0,1,0,41.64,67a25.2,25.2,0,0,0,10.49-2.27A15.82,15.82,0,0,0,65.81,74.94a40.83,40.83,0,0,1-16.46,7.11l-.16,0v75.86l6.22,6.22-4.93,4.93L55.41,174l-5.35,5.35a6.36,6.36,0,0,1,3.62,3.45A6.33,6.33,0,0,1,50,191.27a9.51,9.51,0,0,0,8.82,8.59l.63,0a9.5,9.5,0,0,0,9.17-7,6.22,6.22,0,0,0-3.75-1.23,6.33,6.33,0,0,0,6.33-6.33,7.22,7.22,0,0,0,0-.82A6.34,6.34,0,0,0,65.65,179l-.06-.06,5-5-5-5,2.46-2.45,1.59-1.6v-7.86Z"/><path d="M57.46,41.64a16.61,16.61,0,0,1-.11,1.87,15.15,15.15,0,0,1-1,3.87,12.82,12.82,0,0,1-.87,1.88h0a15.84,15.84,0,1,1,2-7.63Z"/></svg>
+      <span class="name">Keyu<span class="dot">.</span></span>
+      <span class="stamp">Brand · Rev 01</span>
+    </div>
+
+    <div class="hero-mark">
+      <svg viewBox="0 0 85.23 216.2" fill="currentColor"><path d="M84.73,157.11v33.27a25.31,25.31,0,0,1-50.61,1c0-.33,0-.66,0-1V82.09c-.65-.12-1.3-.26-2-.41A41.15,41.15,0,1,1,82.76,40.3c0,.45,0,.89,0,1.34a41,41,0,0,1-8.49,25,16.31,16.31,0,0,1-3.07.3A15.76,15.76,0,0,1,58.5,60.53a25.23,25.23,0,0,0,8.4-17.2c0-.56.06-1.12.06-1.69A25.32,25.32,0,1,0,41.64,67a25.2,25.2,0,0,0,10.49-2.27A15.82,15.82,0,0,0,65.81,74.94a40.83,40.83,0,0,1-16.46,7.11l-.16,0v75.86l6.22,6.22-4.93,4.93L55.41,174l-5.35,5.35a6.36,6.36,0,0,1,3.62,3.45A6.33,6.33,0,0,1,50,191.27a9.51,9.51,0,0,0,8.82,8.59l.63,0a9.5,9.5,0,0,0,9.17-7,6.22,6.22,0,0,0-3.75-1.23,6.33,6.33,0,0,0,6.33-6.33,7.22,7.22,0,0,0,0-.82A6.34,6.34,0,0,0,65.65,179l-.06-.06,5-5-5-5,2.46-2.45,1.59-1.6v-7.86Z"/><path d="M57.46,41.64a16.61,16.61,0,0,1-.11,1.87,15.15,15.15,0,0,1-1,3.87,12.82,12.82,0,0,1-.87,1.88h0a15.84,15.84,0,1,1,2-7.63Z"/></svg>
+      <div class="lockup">
+        <div class="wordmark">Keyu<span class="dot">.</span></div>
+        <div class="desc">IT solutions for the digital age<br>EST. 2021 · ERBIL</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div><div class="k">Direction</div><div class="v"><em>Circuit</em> · industrial</div></div>
+      <div><div class="k">Languages</div><div class="v"><em>EN</em> · AR · KU</div></div>
+      <div><div class="k">Last revision</div><div class="v">2026.05.11</div></div>
+    </div>
+  </aside>
+
+  <!-- ============ RIGHT: index ============ -->
+  <main class="index">
+    <div class="lead">Brand artefacts</div>
+    <h1>Keyu brand &amp;<br><em>design system</em>.</h1>
+    <p class="blurb">A trio of documents covering the brand fundamentals, the system itself, and an example application of the system in production. Each file is self-contained and works offline.</p>
+
+    <nav class="toc">
+      <a href="Keyu Design System.html">
+        <div class="n">01</div>
+        <div class="body">
+          <div class="title">Design system</div>
+          <div class="desc">The full reference — brand fundamentals, logo usage, colour tokens, typography, iconography, spacing, components, imagery, motion. Long-scroll, navigable.</div>
+        </div>
+        <div class="meta">10 sections<br>↗ open</div>
+      </a>
+
+      <a href="Keyu Landing.html">
+        <div class="n">02</div>
+        <div class="body">
+          <div class="title">Landing page</div>
+          <div class="desc">An example application of the system — a marketing site modelled on keyu.tech. Switch between three languages live (EN / AR / KU).</div>
+        </div>
+        <div class="meta">3 locales<br>↗ open</div>
+      </a>
+
+      <a href="assets/logo/keyu-logo.svg" target="_blank">
+        <div class="n">03</div>
+        <div class="body">
+          <div class="title">Logo asset</div>
+          <div class="desc">The source vector — the silhouette mark used across the system. Single colour, scales freely, works at any size from a 16px favicon to a building façade.</div>
+        </div>
+        <div class="meta">SVG · 1 colour<br>↗ open</div>
+      </a>
+    </nav>
+
+    <div class="colophon">
+      <div>© 2026 Keyu Tech</div>
+      <div>Built on the Keyu system · Rev 01</div>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

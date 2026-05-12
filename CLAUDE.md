@@ -27,7 +27,17 @@ Local docs preview (no build needed for the HTML artefacts):
 python3 -m http.server 8000   # then visit http://localhost:8000/
 ```
 
-Deployment is automatic via [.github/workflows/pages.yml](.github/workflows/pages.yml) on push to `main`. The workflow runs typecheck → build → registry, then assembles `_site/` by copying the two docs HTML files (renaming `ui-docs.html` → `index.html`, plus `design-system.html` as-is) plus `tokens.css`, `base.css`, `shadcn.css`, `registry.json`, `r/`, `dist/`, `assets/`, and `keyu-ui/`. If you rename a top-level artefact or add a new directory that needs to ship, update this workflow.
+Deployment is automatic via [.github/workflows/pages.yml](.github/workflows/pages.yml) on push to `main`. The workflow runs typecheck → build → registry, then assembles `_site/` by copying `index.html` (the library docs — the Pages entry point), `design-system.html`, `tokens.css`, `base.css`, `shadcn.css`, `registry.json`, `r/`, `dist/`, `assets/`, and `keyu-ui/`. If you rename a top-level artefact or add a new directory that needs to ship, update this workflow.
+
+[.github/workflows/release.yml](.github/workflows/release.yml) runs **semantic-release** on every push to `main`. It analyses the commits since the last tag using the Angular convention (`feat:` → minor, `fix:`/`perf:` → patch, `feat!:` or `BREAKING CHANGE:` footer → major), and when at least one releasable commit is present it:
+
+1. computes the next version,
+2. updates `package.json` + `CHANGELOG.md` and commits them back (`chore(release): … [skip ci]`),
+3. tags the commit (`vX.Y.Z`),
+4. publishes `@keyu-tech/keyu-ui` to npm with provenance,
+5. creates a GitHub Release with the generated notes.
+
+So the release flow is: write conventional commits → merge to `main` → the workflow does the rest. No commit → no release. Requires an `NPM_TOKEN` repository secret with publish rights to the `@keyu-tech` scope; the built-in `GITHUB_TOKEN` covers the tag, release, and changelog commit. Config lives in [.releaserc.json](.releaserc.json).
 
 ## Architecture — how the layers compose
 

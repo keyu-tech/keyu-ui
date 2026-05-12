@@ -15,7 +15,15 @@
      Layout: sticky topbar, left TOC, long-scroll content.
      ============================================================ */
 
-  body { overflow-x: hidden; }
+  body {
+    overflow-x: hidden;
+    background: var(--bg-canvas);
+    color: var(--fg-primary);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  a { color: inherit; }
 
   /* ---------- Top bar ---------- */
   .topbar {

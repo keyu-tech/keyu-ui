@@ -1,6 +1,6 @@
 {
   "name": "@keyu-tech/keyu-ui",
-  "version": "0.0.0-semantic-release",
+  "version": "1.0.0",
   "description": "Component library for the Circuit direction of the Keyu design system.",
   "license": "MIT",
   "homepage": "https://keyu-tech.github.io/keyu-ui/",
@@ -9,8 +9,17 @@
     "url": "git+https://github.com/keyu-tech/keyu-ui.git"
   },
   "bugs": "https://github.com/keyu-tech/keyu-ui/issues",
-  "keywords": ["shadcn", "design-system", "react", "ui", "keyu", "circuit"],
-  "sideEffects": ["**/*.css"],
+  "keywords": [
+    "shadcn",
+    "design-system",
+    "react",
+    "ui",
+    "keyu",
+    "circuit"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

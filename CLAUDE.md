@@ -27,7 +27,9 @@ Local docs preview (no build needed for the HTML artefacts):
 python3 -m http.server 8000   # then visit http://localhost:8000/
 ```
 
-Deployment is automatic via [.github/workflows/pages.yml](.github/workflows/pages.yml) on push to `main`. The workflow runs typecheck → build → registry, then assembles `_site/` by copying the two docs HTML files (renaming `ui-docs.html` → `index.html`, plus `design-system.html` as-is) plus `tokens.css`, `base.css`, `shadcn.css`, `registry.json`, `r/`, `dist/`, `assets/`, and `keyu-ui/`. If you rename a top-level artefact or add a new directory that needs to ship, update this workflow.
+Deployment is automatic via [.github/workflows/pages.yml](.github/workflows/pages.yml) on push to `main`. The workflow runs typecheck → build → registry, then assembles `_site/` by copying `index.html` (the library docs — the Pages entry point), `design-system.html`, `tokens.css`, `base.css`, `shadcn.css`, `registry.json`, `r/`, `dist/`, `assets/`, and `keyu-ui/`. If you rename a top-level artefact or add a new directory that needs to ship, update this workflow.
+
+[.github/workflows/npm-publish.yml](.github/workflows/npm-publish.yml) auto-publishes `@keyu-tech/keyu-ui` to npm on every push to `main`, but only when the `package.json` version has been bumped to one that isn't already on the registry. Release flow: PR bumps `version`, merge, the workflow publishes. Requires an `NPM_TOKEN` repository secret with publish rights to the `@keyu-tech` scope.
 
 ## Architecture — how the layers compose
 

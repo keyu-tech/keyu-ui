@@ -58,7 +58,7 @@ The remaining shadcn primitives are themed in CSS already ([shadcn.css](shadcn.c
 | [keyu-ui/](keyu-ui/) | React component sources (TypeScript) |
 | [registry.json](registry.json) | shadcn registry index |
 | [r/](r/) | Generated per-component registry entries (built by `pnpm registry`) |
-| [ui-docs.html](ui-docs.html) | Developer documentation site (deployed to `/`) |
+| [index.html](index.html) | Developer documentation site (deployed to `/`) |
 | [design-system.html](design-system.html) | Full design system reference (deployed to `/design-system.html`) |
 | [tools/](tools/) | Prototyping helpers (e.g. `tweaks-panel.jsx`) — not part of `@keyu-tech/keyu-ui` |
 | [.github/workflows/pages.yml](.github/workflows/pages.yml) | Auto-deploys to GitHub Pages on push to `main` |

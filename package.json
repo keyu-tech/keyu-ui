@@ -1,6 +1,6 @@
 {
   "name": "@keyu-tech/keyu-ui",
-  "version": "0.1.1",
+  "version": "0.0.0-semantic-release",
   "description": "Component library for the Circuit direction of the Keyu design system.",
   "license": "MIT",
   "homepage": "https://keyu-tech.github.io/keyu-ui/",

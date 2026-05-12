@@ -1,0 +1,21 @@
+{
+  "name": "popover",
+  "type": "registry:ui",
+  "title": "Popover",
+  "description": "Floating panel anchored to a trigger; built on Radix.",
+  "dependencies": [
+    "@radix-ui/react-popover",
+    "clsx"
+  ],
+  "registryDependencies": [
+    "utils"
+  ],
+  "files": [
+    {
+      "path": "keyu-ui/popover.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/popover.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport * as PopoverPrimitive from \"@radix-ui/react-popover\";\nimport { cn } from \"./lib/cn\";\n\nexport const Popover = PopoverPrimitive.Root;\nexport const PopoverTrigger = PopoverPrimitive.Trigger;\nexport const PopoverAnchor = PopoverPrimitive.Anchor;\n\nexport const PopoverContent = React.forwardRef<\n  React.ElementRef<typeof PopoverPrimitive.Content>,\n  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>\n>(function PopoverContent({ className, align = \"center\", sideOffset = 6, ...props }, ref) {\n  return (\n    <PopoverPrimitive.Portal>\n      <PopoverPrimitive.Content\n        ref={ref}\n        align={align}\n        sideOffset={sideOffset}\n        className={cn(\"sc-popover\", className)}\n        {...props}\n      />\n    </PopoverPrimitive.Portal>\n  );\n});\n"
+    }
+  ]
+}

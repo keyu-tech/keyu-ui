@@ -1,0 +1,107 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "keyu-ui",
+  "homepage": "https://keyu-tech.github.io/keyu-ui/",
+  "items": [
+    {
+      "name": "utils",
+      "type": "registry:lib",
+      "title": "cn helper",
+      "description": "clsx wrapper for composing className strings.",
+      "dependencies": ["clsx"],
+      "files": [{ "path": "keyu-ui/lib/cn.ts", "type": "registry:lib", "target": "lib/utils.ts" }]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Button with Circuit variants (primary, secondary, ghost, soft, danger, link) and asChild slot.",
+      "dependencies": ["@radix-ui/react-slot", "clsx"],
+      "registryDependencies": ["utils"],
+      "files": [
+        { "path": "keyu-ui/button.tsx", "type": "registry:ui", "target": "components/ui/button.tsx" }
+      ]
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "description": "Text input, textarea, and label primitives.",
+      "dependencies": ["clsx"],
+      "registryDependencies": ["utils"],
+      "files": [
+        { "path": "keyu-ui/input.tsx", "type": "registry:ui", "target": "components/ui/input.tsx" }
+      ]
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "Inline status / metadata chip.",
+      "dependencies": ["clsx"],
+      "registryDependencies": ["utils"],
+      "files": [
+        { "path": "keyu-ui/badge.tsx", "type": "registry:ui", "target": "components/ui/badge.tsx" }
+      ]
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "description": "Card surface plus meta, title, description, and footer slots.",
+      "dependencies": ["clsx"],
+      "registryDependencies": ["utils"],
+      "files": [
+        { "path": "keyu-ui/card.tsx", "type": "registry:ui", "target": "components/ui/card.tsx" }
+      ]
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "Modal dialog built on Radix.",
+      "dependencies": ["@radix-ui/react-dialog", "clsx"],
+      "registryDependencies": ["utils"],
+      "files": [
+        { "path": "keyu-ui/dialog.tsx", "type": "registry:ui", "target": "components/ui/dialog.tsx" }
+      ]
+    },
+    {
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "description": "Floating panel anchored to a trigger; built on Radix.",
+      "dependencies": ["@radix-ui/react-popover", "clsx"],
+      "registryDependencies": ["utils"],
+      "files": [
+        { "path": "keyu-ui/popover.tsx", "type": "registry:ui", "target": "components/ui/popover.tsx" }
+      ]
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "registry:ui",
+      "title": "DropdownMenu",
+      "description": "Accessible menu built on Radix DropdownMenu.",
+      "dependencies": ["@radix-ui/react-dropdown-menu", "clsx"],
+      "registryDependencies": ["utils"],
+      "files": [
+        {
+          "path": "keyu-ui/dropdown-menu.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/dropdown-menu.tsx"
+        }
+      ]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "Tabbed interface built on Radix Tabs.",
+      "dependencies": ["@radix-ui/react-tabs", "clsx"],
+      "registryDependencies": ["utils"],
+      "files": [
+        { "path": "keyu-ui/tabs.tsx", "type": "registry:ui", "target": "components/ui/tabs.tsx" }
+      ]
+    }
+  ]
+}

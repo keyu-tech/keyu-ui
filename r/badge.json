@@ -1,0 +1,20 @@
+{
+  "name": "badge",
+  "type": "registry:ui",
+  "title": "Badge",
+  "description": "Inline status / metadata chip.",
+  "dependencies": [
+    "clsx"
+  ],
+  "registryDependencies": [
+    "utils"
+  ],
+  "files": [
+    {
+      "path": "keyu-ui/badge.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/badge.tsx",
+      "content": "import * as React from \"react\";\nimport { cn } from \"./lib/cn\";\n\nexport type BadgeVariant = \"default\" | \"gold\" | \"solid\" | \"outline\" | \"ok\" | \"warn\" | \"error\";\n\nexport interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {\n  variant?: BadgeVariant;\n}\n\nexport const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(function Badge(\n  { variant = \"default\", className, ...props },\n  ref,\n) {\n  return (\n    <span\n      ref={ref}\n      className={cn(\"badge\", variant !== \"default\" && `badge-${variant}`, className)}\n      {...props}\n    />\n  );\n});\n"
+    }
+  ]
+}

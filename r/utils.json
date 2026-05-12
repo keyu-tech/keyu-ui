@@ -1,0 +1,17 @@
+{
+  "name": "utils",
+  "type": "registry:lib",
+  "title": "cn helper",
+  "description": "clsx wrapper for composing className strings.",
+  "dependencies": [
+    "clsx"
+  ],
+  "files": [
+    {
+      "path": "keyu-ui/lib/cn.ts",
+      "type": "registry:lib",
+      "target": "lib/utils.ts",
+      "content": "import { clsx, type ClassValue } from \"clsx\";\n\nexport function cn(...inputs: ClassValue[]): string {\n  return clsx(inputs);\n}\n"
+    }
+  ]
+}

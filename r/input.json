@@ -1,0 +1,20 @@
+{
+  "name": "input",
+  "type": "registry:ui",
+  "title": "Input",
+  "description": "Text input, textarea, and label primitives.",
+  "dependencies": [
+    "clsx"
+  ],
+  "registryDependencies": [
+    "utils"
+  ],
+  "files": [
+    {
+      "path": "keyu-ui/input.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/input.tsx",
+      "content": "import * as React from \"react\";\nimport { cn } from \"./lib/cn\";\n\nexport type InputProps = React.InputHTMLAttributes<HTMLInputElement>;\n\nexport const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(\n  { className, type = \"text\", ...props },\n  ref,\n) {\n  return <input ref={ref} type={type} className={cn(\"input\", className)} {...props} />;\n});\n\nexport type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;\n\nexport const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(\n  { className, rows = 4, ...props },\n  ref,\n) {\n  return <textarea ref={ref} rows={rows} className={cn(\"input\", \"textarea\", className)} {...props} />;\n});\n\nexport interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {\n  required?: boolean;\n}\n\nexport const Label = React.forwardRef<HTMLLabelElement, LabelProps>(function Label(\n  { className, required, children, ...props },\n  ref,\n) {\n  return (\n    <label ref={ref} className={cn(\"sc-form-label\", className)} {...props}>\n      {children}\n      {required ? <span className=\"req\"> *</span> : null}\n    </label>\n  );\n});\n"
+    }
+  ]
+}

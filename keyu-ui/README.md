@@ -1,41 +1,49 @@
-# @keyu/ui
+# @keyu-tech/keyu-ui
 
-The Keyu component library — shadcn/ui primitives, re-themed in the Circuit direction.
+React components for the Circuit direction of the Keyu design system.
 
 > Black, gold, and the room in between. Sharp 2–4px corners, hairline rules, monospace numerics. Bilingual-first (EN / AR / KU).
 
-## Installation
+## Install
 
 ```bash
-pnpm dlx shadcn@latest init -t https://keyu.tech/registry/circuit.json
-pnpm dlx shadcn@latest add button input dialog
+npm install @keyu-tech/keyu-ui
+# or
+yarn add @keyu-tech/keyu-ui
+# or
+pnpm add @keyu-tech/keyu-ui
 ```
 
-Or copy components directly out of `keyu-ui/` into your project's `components/ui/` folder.
+Then import the CSS layers your app needs:
 
-## Requirements
+```ts
+import "@keyu-tech/keyu-ui/tokens.css";   // required — design tokens
+import "@keyu-tech/keyu-ui/base.css";     // optional — Circuit element defaults
+import "@keyu-tech/keyu-ui/shadcn.css";   // required for any styled component
+```
 
-- React 18.3+
-- Tailwind CSS 3.4+ (or 4.0)
-- `tokens.css` — the Circuit token sheet (single source of truth)
-- `shadcn.css` — the themed primitives (drop-in skin layer)
-
-## Exports
+## Components
 
 ```ts
 import {
-  Button, Badge, Card, Input, Label, Textarea,
-  Select, Combobox, Checkbox, RadioGroup, Switch, Slider, InputOTP,
-  Accordion, Collapsible,
-  Dialog, AlertDialog, Sheet, Drawer, Popover, Tooltip, HoverCard,
-  DropdownMenu, ContextMenu, Menubar, NavigationMenu, Command,
-  Tabs, Breadcrumb, Pagination,
-  Alert, Toast, Sonner, Progress, Skeleton,
-  Avatar, Table, DataTable, Chart, Carousel,
-  AspectRatio, ScrollArea, Resizable, Separator,
-  Toggle, ToggleGroup,
-} from "@keyu/ui";
+  Button, Input, Textarea, Label, Badge,
+  Card, CardMeta, CardTitle, CardDescription, CardFooter,
+  Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription,
+  DialogHeader, DialogFooter, DialogClose,
+  Popover, PopoverTrigger, PopoverContent,
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
+  DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator,
+  Tabs, TabsList, TabsTrigger, TabsContent,
+  cn,
+} from "@keyu-tech/keyu-ui";
 ```
+
+Overlay and menu components (Dialog, Popover, DropdownMenu, Tabs) are built on Radix UI, so they handle focus management, keyboard navigation, and ARIA out of the box.
+
+## Peer requirements
+
+- React 18.3+ (React 19 supported)
+- A bundler that handles ESM and `.css` imports (Vite, Next.js, Webpack 5, esbuild, etc.)
 
 ## License
 

@@ -1,49 +1,81 @@
 # Keyu UI
 
-Open-source component library for the **Circuit** direction of the Keyu design system.
-Forty-nine shadcn/ui primitives, re-skinned in black and gold, bilingual-first (EN / AR / KU).
+Component library for the **Circuit** direction of the Keyu design system — re-skinned shadcn/ui primitives in black and gold, bilingual-first (EN / AR / KU).
 
 > **Live docs:** https://keyu-tech.github.io/keyu-ui/
 > **Design system:** https://keyu-tech.github.io/keyu-ui/design-system.html
-> **Landing:** https://keyu-tech.github.io/keyu-ui/landing.html
 
 ---
 
-## Quick start
+## Install
+
+Two equally supported flows.
+
+### As an npm package
 
 ```bash
-pnpm dlx shadcn@latest init -t https://keyu-tech.github.io/keyu-ui/keyu-ui/registry.json
+npm install @keyu-tech/keyu-ui
+# or
+yarn add @keyu-tech/keyu-ui
+# or
+pnpm add @keyu-tech/keyu-ui
+```
+
+```tsx
+import { Button, Dialog, DialogContent, DialogTitle } from "@keyu-tech/keyu-ui";
+import "@keyu-tech/keyu-ui/tokens.css";
+import "@keyu-tech/keyu-ui/base.css";   // optional — global resets
+import "@keyu-tech/keyu-ui/shadcn.css"; // component styles
+```
+
+### Via the shadcn CLI
+
+The repo publishes a shadcn-compatible registry. Init against it once, then add components individually:
+
+```bash
+pnpm dlx shadcn@latest init -t https://keyu-tech.github.io/keyu-ui/registry.json
 pnpm dlx shadcn@latest add button input dialog
 ```
 
-Or import the CSS layer directly:
+The CLI copies the `.tsx` source into your project's `components/ui/` directory and adds the relevant Radix packages to your `package.json`.
 
-```html
-<link rel="stylesheet" href="https://keyu-tech.github.io/keyu-ui/tokens.css" />
-<link rel="stylesheet" href="https://keyu-tech.github.io/keyu-ui/shadcn.css" />
-```
+## What ships today
+
+The library implements the foundation slice:
+
+- **Form / display:** Button, Input, Textarea, Label, Badge, Card
+- **Overlay / behaviour (Radix-backed):** Dialog, Popover, DropdownMenu, Tabs
+
+The remaining shadcn primitives are themed in CSS already ([shadcn.css](shadcn.css) covers accordion, calendar, command, OTP, menubar, etc.) but don't yet have React wrappers. Adding them follows the established pattern; PRs welcome.
 
 ## What's in this repo
 
 | Path | Purpose |
 |---|---|
-| `Keyu UI Docs.html` | Developer documentation site (deployed to `/`) |
-| `Keyu Design System.html` | Full design system reference (deployed to `/design-system.html`) |
-| `Keyu Landing.html` | Production landing page reference |
-| `tokens.css` | Single source of truth — primitive + semantic tokens |
-| `shadcn.css` | The Circuit skin layer for shadcn/ui primitives |
-| `keyu-ui/` | JSX component sources (Button, Input, Badge, …) |
-| `assets/` | Icons, fonts, brand marks |
-| `.github/workflows/pages.yml` | Auto-deploys to GitHub Pages on push to `main` |
+| [tokens.css](tokens.css) | Single source of truth — primitive + semantic tokens |
+| [base.css](base.css) | Optional element resets layered on the token sheet |
+| [shadcn.css](shadcn.css) | The Circuit skin — class-driven, theme-aware |
+| [keyu-ui/](keyu-ui/) | React component sources (TypeScript) |
+| [registry.json](registry.json) | shadcn registry index |
+| [r/](r/) | Generated per-component registry entries (built by `pnpm registry`) |
+| [ui-docs.html](ui-docs.html) | Developer documentation site (deployed to `/`) |
+| [design-system.html](design-system.html) | Full design system reference (deployed to `/design-system.html`) |
+| [tools/](tools/) | Prototyping helpers (e.g. `tweaks-panel.jsx`) — not part of `@keyu-tech/keyu-ui` |
+| [.github/workflows/pages.yml](.github/workflows/pages.yml) | Auto-deploys to GitHub Pages on push to `main` |
+
+## Develop
+
+```bash
+pnpm install
+pnpm typecheck   # tsc --noEmit
+pnpm build       # tsup → dist/ (ESM + CJS + .d.ts)
+pnpm registry    # rebuild r/*.json from registry.json
+pnpm format      # prettier --write .
+```
 
 ## Deployment
 
-This repo deploys to GitHub Pages automatically on every push to `main` via
-`.github/workflows/pages.yml`. After first push:
-
-1. **Settings → Pages → Build and deployment → Source:** *GitHub Actions*
-2. Re-run the workflow (or push again).
-3. Site goes live at `https://keyu-tech.github.io/keyu-ui/`.
+Push to `main` triggers [.github/workflows/pages.yml](.github/workflows/pages.yml), which type-checks, builds, regenerates the registry, and publishes the docs + CSS + registry to GitHub Pages.
 
 ## License
 

@@ -1,0 +1,21 @@
+{
+  "name": "button",
+  "type": "registry:ui",
+  "title": "Button",
+  "description": "Button with Circuit variants (primary, secondary, ghost, soft, danger, link) and asChild slot.",
+  "dependencies": [
+    "@radix-ui/react-slot",
+    "clsx"
+  ],
+  "registryDependencies": [
+    "utils"
+  ],
+  "files": [
+    {
+      "path": "keyu-ui/button.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/button.tsx",
+      "content": "import * as React from \"react\";\nimport { Slot } from \"@radix-ui/react-slot\";\nimport { cn } from \"./lib/cn\";\n\nexport type ButtonVariant = \"primary\" | \"secondary\" | \"ghost\" | \"soft\" | \"danger\" | \"link\";\nexport type ButtonSize = \"sm\" | \"md\" | \"lg\" | \"icon\";\n\nexport interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {\n  variant?: ButtonVariant;\n  size?: ButtonSize;\n  asChild?: boolean;\n}\n\nexport const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(\n  { variant = \"primary\", size = \"md\", asChild = false, className, type, ...props },\n  ref,\n) {\n  const Comp = asChild ? Slot : \"button\";\n  return (\n    <Comp\n      ref={ref}\n      type={asChild ? undefined : (type ?? \"button\")}\n      className={cn(\n        \"btn\",\n        `btn-${variant}`,\n        size !== \"md\" && `btn-${size}`,\n        size === \"icon\" && \"btn-icon\",\n        className,\n      )}\n      {...props}\n    />\n  );\n});\n"
+    }
+  ]
+}

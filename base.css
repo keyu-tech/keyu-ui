@@ -1,0 +1,50 @@
+/* ============================================================
+   KEYU — Base layer
+   Reset + element defaults. Depends on tokens.css.
+   Import after tokens.css if you want the Circuit defaults
+   applied globally; skip it if you only want the tokens.
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg-canvas);
+  color: var(--fg-primary);
+  font-family: var(--font-body);
+  font-size: var(--t-base);
+  line-height: var(--lh-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+[lang="ar"],
+[lang="ku"],
+[dir="rtl"] {
+  font-family: var(--font-arabic);
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--fg-on-gold);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}

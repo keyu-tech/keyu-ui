@@ -1,0 +1,21 @@
+{
+  "name": "dropdown-menu",
+  "type": "registry:ui",
+  "title": "DropdownMenu",
+  "description": "Accessible menu built on Radix DropdownMenu.",
+  "dependencies": [
+    "@radix-ui/react-dropdown-menu",
+    "clsx"
+  ],
+  "registryDependencies": [
+    "utils"
+  ],
+  "files": [
+    {
+      "path": "keyu-ui/dropdown-menu.tsx",
+      "type": "registry:ui",
+      "target": "components/ui/dropdown-menu.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport * as DropdownMenuPrimitive from \"@radix-ui/react-dropdown-menu\";\nimport { cn } from \"./lib/cn\";\n\nexport const DropdownMenu = DropdownMenuPrimitive.Root;\nexport const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;\nexport const DropdownMenuGroup = DropdownMenuPrimitive.Group;\nexport const DropdownMenuPortal = DropdownMenuPrimitive.Portal;\nexport const DropdownMenuSub = DropdownMenuPrimitive.Sub;\nexport const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;\n\nexport const DropdownMenuContent = React.forwardRef<\n  React.ElementRef<typeof DropdownMenuPrimitive.Content>,\n  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>\n>(function DropdownMenuContent({ className, sideOffset = 6, ...props }, ref) {\n  return (\n    <DropdownMenuPrimitive.Portal>\n      <DropdownMenuPrimitive.Content\n        ref={ref}\n        sideOffset={sideOffset}\n        className={cn(\"sc-menu\", className)}\n        {...props}\n      />\n    </DropdownMenuPrimitive.Portal>\n  );\n});\n\nexport const DropdownMenuItem = React.forwardRef<\n  React.ElementRef<typeof DropdownMenuPrimitive.Item>,\n  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>\n>(function DropdownMenuItem({ className, ...props }, ref) {\n  return <DropdownMenuPrimitive.Item ref={ref} className={cn(\"sc-item\", className)} {...props} />;\n});\n\nexport const DropdownMenuCheckboxItem = React.forwardRef<\n  React.ElementRef<typeof DropdownMenuPrimitive.CheckboxItem>,\n  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>\n>(function DropdownMenuCheckboxItem({ className, ...props }, ref) {\n  return (\n    <DropdownMenuPrimitive.CheckboxItem ref={ref} className={cn(\"sc-item\", className)} {...props} />\n  );\n});\n\nexport const DropdownMenuRadioItem = React.forwardRef<\n  React.ElementRef<typeof DropdownMenuPrimitive.RadioItem>,\n  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>\n>(function DropdownMenuRadioItem({ className, ...props }, ref) {\n  return (\n    <DropdownMenuPrimitive.RadioItem ref={ref} className={cn(\"sc-item\", className)} {...props} />\n  );\n});\n\nexport const DropdownMenuLabel = React.forwardRef<\n  React.ElementRef<typeof DropdownMenuPrimitive.Label>,\n  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label>\n>(function DropdownMenuLabel({ className, ...props }, ref) {\n  return (\n    <DropdownMenuPrimitive.Label ref={ref} className={cn(\"sc-label-row\", className)} {...props} />\n  );\n});\n\nexport const DropdownMenuSeparator = React.forwardRef<\n  React.ElementRef<typeof DropdownMenuPrimitive.Separator>,\n  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>\n>(function DropdownMenuSeparator({ className, ...props }, ref) {\n  return (\n    <DropdownMenuPrimitive.Separator ref={ref} className={cn(\"sc-sep\", className)} {...props} />\n  );\n});\n\nexport function DropdownMenuShortcut({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) {\n  return <span className={cn(\"key\", className)} {...props} />;\n}\n"
+    }
+  ]
+}
